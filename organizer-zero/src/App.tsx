@@ -3,10 +3,11 @@ import { AppProvider } from './store/context';
 import { Header, Footer } from './components/layout';
 import { CalendarView, ScheduleView, AnalyticsView, ProfileView, RoadmapView } from './components/views';
 import { EventForm } from './components/forms';
-import { useNavigation } from './store/hooks';
+import { useNavigation, useModal } from './store/hooks';
 
 const AppContent: React.FC = () => {
   const { activeView } = useNavigation();
+  const { isEditModalOpen, selectedTimeBlock, closeEditModal } = useModal();
 
   const renderCurrentView = () => {
     switch (activeView) {
@@ -32,7 +33,12 @@ const AppContent: React.FC = () => {
         {renderCurrentView()}
       </main>
       <Footer />
-      {/* EventForm можно интегрировать через useModal в будущем */}
+      <EventForm
+        isOpen={isEditModalOpen}
+        timeBlock={selectedTimeBlock}
+        onSave={() => {}}
+        onCancel={closeEditModal}
+      />
     </div>
   );
 };
