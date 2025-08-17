@@ -33,8 +33,39 @@ export const Header: React.FC = () => {
   const { initTheme, toggleTheme } = useTheme();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
 
-  useEffect(() => { initTheme(); }, []);
+  useEffect(() => { 
+    initTheme(); 
+    // Проверяем текущую тему
+    const checkTheme = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      setIsDarkTheme(isDark);
+      console.log('Current theme:', isDark ? 'dark' : 'light');
+    };
+    
+    checkTheme();
+    
+    // Слушаем изменения темы
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          checkTheme();
+        }
+      });
+    });
+    
+    observer.observe(document.documentElement, { attributes: true });
+    
+    return () => observer.disconnect();
+  }, [initTheme]);
+
+  const handleThemeToggle = () => {
+    console.log('Toggling theme from:', isDarkTheme ? 'dark' : 'light');
+    const newTheme = toggleTheme();
+    console.log('New theme:', newTheme);
+    setIsDarkTheme(newTheme === 'dark');
+  };
 
   // Иконки для видов
   const viewIcons: Record<ViewType, React.ComponentType<{ className?: string }>> = {
@@ -84,14 +115,22 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-gray-800 border-b border-gray-700 mb-6">
+    <header className={`border-b mb-6 transition-colors duration-300 ${
+      isDarkTheme 
+        ? 'bg-gray-800 border-gray-700' 
+        : 'bg-white border-gray-200'
+    }`}>
       <div className="flex items-center justify-between p-4">
         {/* Logo и заголовок */}
         <div className="flex items-center space-x-4">
-          <div className="text-2xl font-bold text-white leading-none">
+          <div className={`text-2xl font-bold leading-none ${
+            isDarkTheme ? 'text-white' : 'text-gray-900'
+          }`}>
             Organizer Zero
           </div>
-          <div className="hidden sm:block text-sm text-gray-400">
+          <div className={`hidden sm:block text-sm ${
+            isDarkTheme ? 'text-gray-400' : 'text-gray-500'
+          }`}>
             v3.4 Модульная архитектура
           </div>
         </div>
@@ -111,7 +150,7 @@ export const Header: React.FC = () => {
                 onClick={() => handleViewChange(view)}
                 icon={IconComponent}
                 className={`flex items-center space-x-2 ${
-                  isActive ? 'bg-blue-600' : 'bg-gray-700 hover:bg-gray-600'
+                  isActive ? 'bg-blue-600' : isDarkTheme ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'
                 }`}
                 aria-label={config?.description || view}
               >
@@ -123,8 +162,12 @@ export const Header: React.FC = () => {
 
         {/* Режимы работы */}
         <div className="hidden md:flex items-center mx-4">
-          <span className="text-xs text-gray-400 mr-2">Режим:</span>
-          <div className="flex items-center bg-gray-700 rounded-xl px-2 py-1 gap-2 h-10">
+          <span className={`text-xs mr-2 ${
+            isDarkTheme ? 'text-gray-400' : 'text-gray-500'
+          }`}>Режим:</span>
+          <div className={`flex items-center rounded-xl px-2 py-1 gap-2 h-10 ${
+            isDarkTheme ? 'bg-gray-700' : 'bg-gray-200'
+          }`}>
             {(['focus', 'relax', 'planning'] as AppMode[]).map((modeOption) => {
               const IconComponent = modeIcons[modeOption];
               const isActive = mode === modeOption;
@@ -138,7 +181,9 @@ export const Header: React.FC = () => {
                   className={`h-8 px-3 rounded-md ${
                     isActive 
                       ? `${modeColor.bg} text-white` 
-                      : 'text-gray-300 hover:text-white hover:bg-gray-600'
+                      : isDarkTheme 
+                        ? 'text-gray-300 hover:text-white hover:bg-gray-600'
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-300'
                   }`}
                   aria-label={`Переключить в режим ${modeOption}`}
                   aria-pressed={isActive}
@@ -160,10 +205,15 @@ export const Header: React.FC = () => {
           <Button
             variant="secondary"
             size="sm"
-            onClick={toggleTheme}
-            icon={settings.animationsEnabled ? Sun : Moon}
+            onClick={handleThemeToggle}
+            icon={isDarkTheme ? Sun : Moon}
             aria-label="Переключить тему"
-          />
+            className="bg-blue-500 hover:bg-blue-600 text-white"
+          >
+            <span className="ml-2 text-xs">
+              {isDarkTheme ? 'Светлая' : 'Темная'}
+            </span>
+          </Button>
           {/* Домой */}
           <Button
             variant="secondary"
@@ -191,9 +241,17 @@ export const Header: React.FC = () => {
 
             {/* Панель уведомлений */}
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-80 max-w-[90vw] bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50">
-                <div className="p-4 border-b border-gray-700 flex justify-between items-center">
-                  <h3 className="text-lg font-semibold text.white">Уведомления</h3>
+              <div className={`absolute right-0 mt-2 w-80 max-w-[90vw] border rounded-lg shadow-xl z-50 ${
+                isDarkTheme 
+                  ? 'bg-gray-800 border-gray-700' 
+                  : 'bg-white border-gray-200'
+              }`}>
+                <div className={`p-4 border-b ${
+                  isDarkTheme ? 'border-gray-700' : 'border-gray-200'
+                } flex justify-between items-center`}>
+                  <h3 className={`text-lg font-semibold ${
+                    isDarkTheme ? 'text-white' : 'text-gray-900'
+                  }`}>Уведомления</h3>
                   {notifications.length > 0 && (
                     <Button
                       variant="secondary"
@@ -215,7 +273,11 @@ export const Header: React.FC = () => {
                     notifications.map((notification) => (
                       <div
                         key={notification.id}
-                        className="p-4 border-b border-gray-700 last:border-b-0 hover:bg-gray-700"
+                        className={`p-4 border-b last:border-b-0 hover:transition-colors ${
+                          isDarkTheme 
+                            ? 'border-gray-700 hover:bg-gray-700' 
+                            : 'border-gray-200 hover:bg-gray-50'
+                        }`}
                       >
                         <div className="flex justify-between items-start">
                           <div className="flex-1">
@@ -227,10 +289,14 @@ export const Header: React.FC = () => {
                             }`}>
                               {notification.title}
                             </div>
-                            <div className="text-sm text-gray-300 mt-1 text-center">
+                            <div className={`text-sm mt-1 text-center ${
+                              isDarkTheme ? 'text-gray-300' : 'text-gray-600'
+                            }`}>
                               {notification.message}
                             </div>
-                            <div className="text-xs text-gray-500 mt-2 text-center">
+                            <div className={`text-xs mt-2 text-center ${
+                              isDarkTheme ? 'text-gray-500' : 'text-gray-400'
+                            }`}>
                               {new Date(notification.timestamp).toLocaleTimeString('ru-RU', {
                                 hour: '2-digit',
                                 minute: '2-digit'
@@ -250,30 +316,9 @@ export const Header: React.FC = () => {
                     ))
                   )}
                 </div>
-
-                <div className="p-4 border-t border-gray-700 bg-gray-750">
-                  <label className="flex items-center space-x-2 text-sm text-gray-300">
-                    <input
-                      type="checkbox"
-                      checked={settings.notificationsEnabled}
-                      onChange={toggleNotifications}
-                      className="rounded"
-                    />
-                    <span>Включить уведомления</span>
-                  </label>
-                </div>
               </div>
             )}
           </div>
-
-          {/* Быстрые настройки */}
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => handleViewChange('profile')}
-            icon={Settings}
-            aria-label="Настройки"
-          />
 
           {/* Мобильное меню */}
           <Button
@@ -282,89 +327,40 @@ export const Header: React.FC = () => {
             onClick={() => setShowMobileMenu(!showMobileMenu)}
             icon={showMobileMenu ? X : Menu}
             className="lg:hidden"
-            aria-label="Меню"
+            aria-label="Открыть меню"
           />
         </div>
       </div>
 
-      {/* Мобильная навигация */}
+      {/* Мобильное меню */}
       {showMobileMenu && (
-        <>
-          {/* Overlay для закрытия меню */}
-          <div 
-            className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" 
-            onClick={() => setShowMobileMenu(false)}
-          />
-          
-          <div className="lg:hidden bg-gray-750 border-t border-gray-700 relative z-50">
-            <div className="p-4 space-y-2">
-              {/* Режимы работы для мобильных */}
-              <div className="mb-4">
-                <div className="text-sm text-gray-400 mb-2">Режим работы</div>
-                <div className="flex space-x-2">
-                  {(['focus', 'relax', 'planning'] as AppMode[]).map((modeOption) => {
-                    const IconComponent = modeIcons[modeOption];
-                    const isActive = mode === modeOption;
-                    const modeColor = getModeColor(modeOption);
+        <div className={`lg:hidden border-t ${
+          isDarkTheme ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
+        }`}>
+          <div className="p-4 space-y-2">
+            {(['calendar', 'schedule', 'analytics', 'profile', 'roadmap'] as ViewType[]).map((view) => {
+              const IconComponent = viewIcons[view];
+              const config = VIEW_CONFIGS[view as keyof typeof VIEW_CONFIGS];
+              const isActive = activeView === view;
 
-                    return (
-                      <Button
-                        key={modeOption}
-                        size="sm"
-                        onClick={() => handleModeChange(modeOption)}
-                        className={`h-10 min-w-[110px] justify-center px-3 rounded ${
-                          isActive 
-                            ? `${modeColor.bg} text-white` 
-                            : 'bg-gray-700 text-gray-300 hover:text-white hover:bg-gray-600'
-                        }`}
-                      >
-                        <IconComponent className="w-4 h-4" />
-                        <span className="text-sm">
-                          {modeOption === 'focus' ? 'Фокус' : 
-                           modeOption === 'relax' ? 'Отдых' : 'Планирование'}
-                        </span>
-                      </Button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Виды для мобильных */}
-              <div className="text-sm text-gray-400 mb-2">Навигация</div>
-              {(['calendar', 'schedule', 'analytics', 'profile', 'roadmap'] as ViewType[]).map((view) => {
-                const IconComponent = viewIcons[view];
-                const config = VIEW_CONFIGS[view as keyof typeof VIEW_CONFIGS];
-                const isActive = activeView === view;
-
-                return (
-                  <Button
-                    key={view}
-                    variant={isActive ? 'primary' : 'secondary'}
-                    onClick={() => handleViewChange(view)}
-                    className={`w-full h-12 flex items-center space-x-3 px-4 text-left ${
-                      isActive ? 'bg-blue-600 text-white' : 'bg-gray-700 hover:bg-gray-600'
-                    }`}
-                  >
-                    <IconComponent className="w-5 h-5" />
-                    <div className="flex-1 min-w-0">
-                      <div className="font-medium truncate">{config?.title || view}</div>
-                      <div className="text-sm opacity-75 truncate">{config?.description || ''}</div>
-                    </div>
-                  </Button>
-                );
-              })}
-            </div>
+              return (
+                <Button
+                  key={view}
+                  variant={isActive ? 'primary' : 'secondary'}
+                  size="sm"
+                  onClick={() => handleViewChange(view)}
+                  icon={IconComponent}
+                  className={`w-full justify-start ${
+                    isActive ? 'bg-blue-600' : isDarkTheme ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'
+                  }`}
+                  aria-label={config?.description || view}
+                >
+                  <span>{config?.title || view}</span>
+                </Button>
+              );
+            })}
           </div>
-        </>
-      )}
-
-      {/* Закрытие уведомлений при клике вне */}
-      {showNotifications && (
-        <div 
-          className="fixed inset-0 z-40" 
-          onClick={() => setShowNotifications(false)}
-          aria-hidden="true"
-        />
+        </div>
       )}
     </header>
   );

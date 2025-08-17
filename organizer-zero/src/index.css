@@ -16,18 +16,48 @@ body {
 }
 
 :root {
-  --bg: #0f172a; /* slate-900 */
-  --fg: #ffffff;
+  /* Light theme variables */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --bg-tertiary: #f3f4f6;
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-tertiary: #6b7280;
+  --border-primary: #e5e7eb;
+  --border-secondary: #d1d5db;
+  --accent-primary: #3b82f6;
+  --accent-secondary: #1d4ed8;
 }
 
-.dark :root {
-  --bg: #0f172a;
-  --fg: #ffffff;
+.dark {
+  /* Dark theme variables */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  --text-tertiary: #94a3b8;
+  --border-primary: #475569;
+  --border-secondary: #64748b;
+  --accent-primary: #3b82f6;
+  --accent-secondary: #60a5fa;
+}
+
+/* Force theme application */
+html:not(.dark) {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+html.dark {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 body {
-  background-color: var(--bg);
-  color: var(--fg);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .line-clamp-2 {
@@ -35,4 +65,41 @@ body {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+/* Calendar specific theme styles */
+.calendar-light {
+  --calendar-bg: #ffffff;
+  --calendar-cell-bg: #ffffff;
+  --calendar-cell-hover: #f9fafb;
+  --calendar-border: #e5e7eb;
+  --calendar-text: #111827;
+  --calendar-header-bg: #f3f4f6;
+  --calendar-header-text: #374151;
+}
+
+.calendar-dark {
+  --calendar-bg: #0f172a;
+  --calendar-cell-bg: #1e293b;
+  --calendar-cell-hover: #334155;
+  --calendar-border: #475569;
+  --calendar-text: #ffffff;
+  --calendar-header-bg: #1e293b;
+  --calendar-header-text: #e2e8f0;
+}
+
+/* Debug theme styles */
+.theme-debug {
+  border: 2px solid red;
+}
+
+.theme-debug::before {
+  content: 'Theme: ' attr(data-theme);
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: red;
+  color: white;
+  padding: 5px;
+  z-index: 9999;
 }

@@ -321,6 +321,7 @@ export const useTheme = () => {
   };
 
   const applyTheme = (theme: 'light' | 'dark') => {
+    console.log('Applying theme:', theme);
     const root = document.documentElement;
     if (theme === 'dark') {
       root.classList.add('dark');
@@ -328,16 +329,20 @@ export const useTheme = () => {
       root.classList.remove('dark');
     }
     try { localStorage.setItem('theme', theme); } catch {}
+    console.log('HTML classes after theme change:', root.className);
   };
 
   const init = () => {
+    console.log('Initializing theme...');
     const stored = getStored();
     if (stored) {
+      console.log('Using stored theme:', stored);
       applyTheme(stored);
       return stored;
     }
     const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     const theme: 'light' | 'dark' = prefersDark ? 'dark' : 'light';
+    console.log('Using system preference:', theme);
     applyTheme(theme);
     return theme;
   };
@@ -345,6 +350,7 @@ export const useTheme = () => {
   const toggle = () => {
     const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
     const next = current === 'dark' ? 'light' : 'dark';
+    console.log('Toggling theme from', current, 'to', next);
     applyTheme(next);
     return next;
   };
