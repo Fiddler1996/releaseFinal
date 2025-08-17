@@ -85,6 +85,8 @@ export interface AppContextType {
   getEventsForRange: (start: Date, end: Date) => CalendarEvent[];
   getEventsForMonth: (year: number, month: number) => CalendarEvent[];
   playNotificationSound: () => void;
+  security?: any; // SecurityContext
+  initializeSecurity?: (masterPassword: string) => Promise<void>;
 }
 
 // ==== ACTION TYPES ====

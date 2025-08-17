@@ -1,8 +1,9 @@
 // store/context.tsx
-import React, { createContext, useContext, useReducer, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, useCallback, useEffect, useState } from 'react';
 import type { AppContextType, CalendarEvent } from '../types';
 import { appReducer, initialState } from './reducer';
 import { AUTO_REMOVE_DELAY } from '../utils/constants';
+import { SecurityContextImpl } from '../security';
 
 // ==== CONTEXT CREATION ====
 const AppContext = createContext<AppContextType | null>(null);
@@ -23,6 +24,7 @@ interface AppProviderProps {
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
+  const [security, setSecurity] = useState<SecurityContextImpl | null>(null);
 
   // ==== EVENT UTILITIES ====
   
@@ -144,6 +146,19 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     }
   }, [state.timeBlocks, state.settings.autoSave]);
 
+  // ==== SECURITY INITIALIZATION ====
+  
+  const initializeSecurity = useCallback(async (masterPassword: string) => {
+    try {
+      const securityContext = new SecurityContextImpl();
+      await securityContext.initialize(masterPassword);
+      setSecurity(securityContext);
+    } catch (error) {
+      console.error('Failed to initialize security:', error);
+      throw error;
+    }
+  }, []);
+
   // ==== CONTEXT VALUE ====
   
   const contextValue: AppContextType = {
@@ -152,7 +167,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     getEventsForDate,
     getEventsForRange,
     getEventsForMonth,
-    playNotificationSound
+    playNotificationSound,
+    security,
+    initializeSecurity
   };
 
   return (
