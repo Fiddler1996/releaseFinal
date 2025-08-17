@@ -55,11 +55,11 @@ const CalendarView: React.FC = () => {
           onClick={() => handleDateClick(clone)}
           className={`flex flex-col p-1 border cursor-pointer transition-all duration-100 
             ${isCurrentMonth ? '' : 'opacity-40'} 
-            ${isToday ? 'bg-blue-100' : ''} 
+            ${isToday ? 'bg-blue-200/40' : ''} 
             ${isSelected ? 'ring-2 ring-blue-500 rounded-md' : ''}
           `}
         >
-          <span className="text-xs font-medium">
+          <span className="text-xs font-medium text-gray-800 dark:text-gray-100">
             {formatDate(clone, 'short')}
           </span>
 
@@ -68,14 +68,14 @@ const CalendarView: React.FC = () => {
               {events.slice(0, 3).map((ev: CalendarEvent) => (
                 <span
                   key={ev.id}
-                  className="block truncate text-[10px] bg-blue-200 rounded px-1"
+                  className="block truncate text-[10px] bg-blue-100 text-blue-900 rounded px-1 border border-blue-200"
                   title={ev.title}
                 >
                   {ev.title}
                 </span>
               ))}
               {events.length > 3 && (
-                <span className="text-[10px] text-gray-500">+{events.length - 3} ещё</span>
+                <span className="text-[10px] text-gray-700 dark:text-gray-300">+{events.length - 3} ещё</span>
               )}
             </div>
           )}
@@ -110,7 +110,7 @@ const CalendarView: React.FC = () => {
         <Button onClick={goToToday}>Сегодня</Button>
       </div>
 
-      <div className="grid grid-cols-7 text-xs font-medium text-center border-b">
+      <div className="grid grid-cols-7 text-xs font-medium text-center border-b bg-gray-100 text-gray-700">
         <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
       </div>
 
