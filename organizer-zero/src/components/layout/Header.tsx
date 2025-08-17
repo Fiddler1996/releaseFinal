@@ -168,9 +168,9 @@ export const Header: React.FC = () => {
 
             {/* Панель уведомлений */}
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-80 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50">
+              <div className="absolute right-0 mt-2 w-80 max-w-[90vw] bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50">
                 <div className="p-4 border-b border-gray-700 flex justify-between items-center">
-                  <h3 className="text-lg font-semibold text-white">Уведомления</h3>
+                  <h3 className="text-lg font-semibold text.white">Уведомления</h3>
                   {notifications.length > 0 && (
                     <Button
                       variant="secondary"
@@ -185,7 +185,7 @@ export const Header: React.FC = () => {
 
                 <div className="max-h-80 overflow-y-auto">
                   {notifications.length === 0 ? (
-                    <div className="p-4 text-center text-gray-400">
+                    <div className="p-6 text-center text-gray-400">
                       Нет новых уведомлений
                     </div>
                   ) : (
@@ -196,7 +196,7 @@ export const Header: React.FC = () => {
                       >
                         <div className="flex justify-between items-start">
                           <div className="flex-1">
-                            <div className={`text-sm font-medium ${
+                            <div className={`text-sm font-medium text-center ${
                               notification.type === 'error' ? 'text-red-400' :
                               notification.type === 'warning' ? 'text-yellow-400' :
                               notification.type === 'success' ? 'text-green-400' :
@@ -204,10 +204,10 @@ export const Header: React.FC = () => {
                             }`}>
                               {notification.title}
                             </div>
-                            <div className="text-sm text-gray-300 mt-1">
+                            <div className="text-sm text-gray-300 mt-1 text-center">
                               {notification.message}
                             </div>
-                            <div className="text-xs text-gray-500 mt-2">
+                            <div className="text-xs text-gray-500 mt-2 text-center">
                               {new Date(notification.timestamp).toLocaleTimeString('ru-RU', {
                                 hour: '2-digit',
                                 minute: '2-digit'

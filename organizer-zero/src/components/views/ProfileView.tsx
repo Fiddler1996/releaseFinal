@@ -513,7 +513,7 @@ export const ProfileView: React.FC = () => {
               variant="primary"
               onClick={exportData}
               icon={Download}
-              className="w-full"
+              className="w-full h-10"
             >
               Экспорт данных
             </Button>
@@ -535,7 +535,7 @@ export const ProfileView: React.FC = () => {
               <Button
                 variant="secondary"
                 icon={Upload}
-                className="w-full cursor-pointer"
+                className="w-full h-10 cursor-pointer"
               >
                 Импорт данных
               </Button>
@@ -552,7 +552,7 @@ export const ProfileView: React.FC = () => {
               variant="danger"
               onClick={clearAllData}
               icon={Trash2}
-              className="w-full"
+              className="w-full h-10"
             >
               Очистить всё
             </Button>

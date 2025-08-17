@@ -55,12 +55,12 @@ const CalendarView: React.FC = () => {
           tabIndex={0}
           onClick={() => handleDateClick(clone)}
           className={`flex flex-col p-1 border cursor-pointer transition-all duration-100 
-            ${isCurrentMonth ? '' : 'opacity-40'} 
+            ${isCurrentMonth ? '' : 'opacity-50'} 
             ${isToday ? 'bg-blue-200/40' : ''} 
             ${isSelected ? 'ring-2 ring-blue-500 rounded-md' : ''}
           `}
         >
-          <span className="text-xs font-medium text-gray-800 dark:text-gray-100">
+          <span className="text-xs font-semibold text-gray-900 dark:text-white">
             {clone.getDate()}
           </span>
 
