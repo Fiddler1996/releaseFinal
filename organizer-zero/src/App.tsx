@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppProvider } from './store/context';
 import { Header, Footer } from './components/layout';
 import { CalendarView, ScheduleView, AnalyticsView, ProfileView, RoadmapView } from './components/views';
@@ -8,6 +8,25 @@ import { useNavigation, useModal } from './store/hooks';
 const AppContent: React.FC = () => {
   const { activeView } = useNavigation();
   const { isEditModalOpen, selectedTimeBlock, closeEditModal } = useModal();
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+
+  useEffect(() => {
+    // Проверяем текущую тему
+    setIsDarkTheme(document.documentElement.classList.contains('dark'));
+    
+    // Слушаем изменения темы
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          setIsDarkTheme(document.documentElement.classList.contains('dark'));
+        }
+      });
+    });
+    
+    observer.observe(document.documentElement, { attributes: true });
+    
+    return () => observer.disconnect();
+  }, []);
 
   const renderCurrentView = () => {
     switch (activeView) {
@@ -27,9 +46,15 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className={`min-h-screen flex flex-col transition-colors duration-300 ${
+      isDarkTheme 
+        ? 'bg-gray-900 text-white' 
+        : 'bg-gray-50 text-gray-900'
+    }`}>
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-6">
+      <main className={`flex-1 container mx-auto px-4 py-6 transition-colors duration-300 ${
+        isDarkTheme ? 'bg-gray-900' : 'bg-gray-50'
+      }`}>
         {renderCurrentView()}
       </main>
       <Footer />
