@@ -60,7 +60,7 @@ const CalendarView: React.FC = () => {
           `}
         >
           <span className="text-xs font-medium text-gray-800 dark:text-gray-100">
-            {formatDate(clone, 'short')}
+            {clone.getDate()}
           </span>
 
           {events.length > 0 && (
@@ -98,7 +98,7 @@ const CalendarView: React.FC = () => {
         <Button onClick={() => navigateCalendar('prev')}>
           <ChevronLeft className="w-4 h-4" />
         </Button>
-        <h2 className="font-semibold">
+        <h2 className="font-semibold text-white capitalize">
           {base.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })}
         </h2>
         <Button onClick={() => navigateCalendar('next')}>
