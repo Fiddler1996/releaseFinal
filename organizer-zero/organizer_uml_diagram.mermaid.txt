@@ -1,0 +1,199 @@
+classDiagram
+    %% Core Types and Interfaces
+    class AppState {
+        +timeBlocks: TimeBlock[]
+        +notifications: Notification[]
+        +mode: AppMode
+        +currentDate: string
+        +activeView: ViewType
+        +selectedTimeBlock: TimeBlock | null
+        +isEditModalOpen: boolean
+        +searchQuery: string
+        +settings: AppSettings
+        +loading: LoadingState
+        +error: string | null
+        +calendarDate: Date
+        +calendarView: CalendarView
+    }
+
+    class TimeBlock {
+        +id: string
+        +title: string
+        +start: string
+        +end: string
+        +date: string
+        +type: TimeBlockType
+        +description?: string
+        +location?: string
+        +priority?: Priority
+        +tags?: string[]
+        +completed?: boolean
+        +createdAt: string
+        +updatedAt: string
+    }
+
+    class CalendarEvent {
+        +startDateTime: Date
+        +endDateTime: Date
+        +duration: number
+    }
+
+    class Notification {
+        +id: string
+        +type: 'success' | 'error' | 'warning' | 'info'
+        +title: string
+        +message: string
+        +timestamp: string
+        +autoRemove?: boolean
+    }
+
+    class AppSettings {
+        +notificationsEnabled: boolean
+        +autoSave: boolean
+        +defaultReminder: number
+        +calendarView: CalendarView
+        +weekStartsOn: 0 | 1
+        +timeFormat: '12h' | '24h'
+        +soundEnabled: boolean
+        +animationsEnabled: boolean
+    }
+
+    %% Core Context and Providers
+    class AppContext {
+        +state: AppState
+        +dispatch: React.Dispatch<AppAction>
+        +getEventsForDate: (date: string) => CalendarEvent[]
+        +getEventsForRange: (start: Date, end: Date) => CalendarEvent[]
+        +getEventsForMonth: (year: number, month: number) => CalendarEvent[]
+        +playNotificationSound: () => void
+    }
+
+    class AppProvider {
+        +children: React.ReactNode
+        -useReducer()
+        -useCallback()
+        -useEffect()
+        +contextValue: AppContextType
+    }
+
+    %% State Management
+    class AppReducer {
+        +appReducer(state: AppState, action: AppAction): AppState
+        +initialState: AppState
+    }
+
+    %% UI Components
+    class OrganizerZeroApp {
+        +mode: AppMode
+        +activeView: ViewType
+        +notifications: Notification[]
+        +showNotifications: boolean
+        +render(): JSX.Element
+    }
+
+    class CalendarView {
+        +render(): JSX.Element
+    }
+
+    class Button {
+        +variant: 'primary' | 'secondary' | 'danger' | 'success'
+        +size: 'sm' | 'md' | 'lg'
+        +disabled: boolean
+        +loading: boolean
+        +onClick: () => void
+        +render(): JSX.Element
+    }
+
+    class LoadingSpinner {
+        +size: 'sm' | 'md' | 'lg'
+        +text?: string
+        +progress?: number
+        +render(): JSX.Element
+    }
+
+    %% Utility Functions
+    class Utils {
+        +formatTime(time: string): string
+        +formatDate(date: Date, format: string): string
+        +parseEventInput(input: string, currentDate: string): Partial<TimeBlock>
+    }
+
+    class Constants {
+        +TYPE_COLORS: object
+        +TYPE_ICONS: object
+        +MODE_COLORS: object
+    }
+
+    %% Missing Components (To Be Implemented)
+    class EventForm {
+        <<interface>>
+        +timeBlock?: TimeBlock
+        +onSave: (timeBlock: TimeBlock) => void
+        +onCancel: () => void
+        +render(): JSX.Element
+    }
+
+    class EventList {
+        <<interface>>
+        +events: CalendarEvent[]
+        +onEdit: (event: TimeBlock) => void
+        +onDelete: (id: string) => void
+        +onToggleComplete: (id: string) => void
+        +render(): JSX.Element
+    }
+
+    class CalendarGrid {
+        <<interface>>
+        +date: Date
+        +view: CalendarView
+        +events: CalendarEvent[]
+        +onDateClick: (date: Date) => void
+        +onEventClick: (event: TimeBlock) => void
+        +render(): JSX.Element
+    }
+
+    class QuickAdd {
+        <<interface>>
+        +onAdd: (input: string) => void
+        +placeholder?: string
+        +render(): JSX.Element
+    }
+
+    class SearchAndFilter {
+        <<interface>>
+        +query: string
+        +filters: FilterOptions
+        +onSearch: (query: string) => void
+        +onFilterChange: (filters: FilterOptions) => void
+        +render(): JSX.Element
+    }
+
+    %% Relationships
+    AppState ||--o{ TimeBlock : contains
+    AppState ||--o{ Notification : contains
+    AppState ||--|| AppSettings : has
+    CalendarEvent --|> TimeBlock : extends
+
+    AppProvider --> AppContext : provides
+    AppProvider --> AppReducer : uses
+    AppContext --> AppState : manages
+    
+    OrganizerZeroApp --> AppContext : consumes
+    CalendarView --> AppContext : consumes
+    
+    EventForm --> Utils : uses
+    EventForm --> Constants : uses
+    EventList --> Constants : uses
+    CalendarGrid --> Utils : uses
+    CalendarGrid --> Constants : uses
+    
+    OrganizerZeroApp --> CalendarView : renders
+    OrganizerZeroApp --> Button : uses
+    OrganizerZeroApp --> LoadingSpinner : uses
+    
+    %% Future Components Dependencies
+    EventForm -.-> AppContext : will consume
+    EventList -.-> AppContext : will consume
+    CalendarGrid -.-> AppContext : will consume
+    QuickAdd -.-> AppContext : will consume
+    SearchAndFilter -.-> AppContext : will consume
