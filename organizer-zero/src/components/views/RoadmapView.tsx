@@ -762,3 +762,5 @@ export const RoadmapView: React.FC = () => {
     </div>
   );
 };
+
+export default RoadmapView;

@@ -6,7 +6,7 @@ import type { ButtonProps } from '../../types';
  * Компонент кнопки с поддержкой иконок и состояний загрузки
  */
 export const Button: React.FC<ButtonProps> = ({
-  children,
+  children = null,
   variant = 'secondary',
   size = 'md',
   disabled = false,

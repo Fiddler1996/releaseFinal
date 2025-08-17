@@ -1,21 +1,24 @@
-import React from 'react';
-import { useCalendar, useTimeBlocks } from '../../store/hooks';
+import React, { useEffect } from 'react';
+import { useCalendar } from '../../store/hooks';
 import { addDays, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth } from 'date-fns';
-import { Button } from '../ui/Button';
+import { Button } from '../ui';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { formatDateShort } from '../../utils/formatters';
+import { formatDate } from '../../utils/formatters';
+import type { CalendarEvent } from '../../types';
 
 const CalendarView: React.FC = () => {
   const {
     currentDate,
     setCurrentDate,
     setCalendarView,
-    goToPreviousMonth,
-    goToNextMonth,
-    goToToday
+    navigateCalendar,
+    goToToday,
+    getEventsForDate
   } = useCalendar();
 
-  const { getEventsForDate } = useTimeBlocks();
+  useEffect(() => {
+    setCalendarView('month');
+  }, [setCalendarView]);
 
   const base = new Date(currentDate);
   const monthStart = startOfMonth(base);
@@ -24,7 +27,6 @@ const CalendarView: React.FC = () => {
   const endDate = endOfWeek(monthEnd, { weekStartsOn: 1 });
 
   const handleDateClick = (date: Date) => {
-    // Устанавливаем дату и переходим в дневной вид (рендерится через ScheduleView)
     setCurrentDate(date.toISOString().split('T')[0]);
     setCalendarView('day');
   };
@@ -58,12 +60,12 @@ const CalendarView: React.FC = () => {
           `}
         >
           <span className="text-xs font-medium">
-            {formatDateShort(clone)}
+            {formatDate(clone, 'short')}
           </span>
 
           {events.length > 0 && (
             <div className="mt-1 flex flex-col gap-0.5">
-              {events.slice(0, 3).map((ev) => (
+              {events.slice(0, 3).map((ev: CalendarEvent) => (
                 <span
                   key={ev.id}
                   className="block truncate text-[10px] bg-blue-200 rounded px-1"
@@ -93,19 +95,19 @@ const CalendarView: React.FC = () => {
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between p-2 border-b">
-        <Button variant="ghost" onClick={goToPreviousMonth}>
+        <Button onClick={() => navigateCalendar('prev')}>
           <ChevronLeft className="w-4 h-4" />
         </Button>
         <h2 className="font-semibold">
           {base.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })}
         </h2>
-        <Button variant="ghost" onClick={goToNextMonth}>
+        <Button onClick={() => navigateCalendar('next')}>
           <ChevronRight className="w-4 h-4" />
         </Button>
       </div>
 
       <div className="flex items-center justify-center p-2">
-        <Button variant="secondary" onClick={goToToday}>Сегодня</Button>
+        <Button onClick={goToToday}>Сегодня</Button>
       </div>
 
       <div className="grid grid-cols-7 text-xs font-medium text-center border-b">

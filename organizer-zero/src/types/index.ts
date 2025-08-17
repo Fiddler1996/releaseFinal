@@ -115,16 +115,16 @@ export type AppAction =
 // ==== COMPONENT PROP INTERFACES ====
 
 export interface ButtonProps {
-  children: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'danger' | 'success';
-  size?: 'sm' | 'md' | 'lg';
-  disabled?: boolean;
-  icon?: React.ComponentType<{ className?: string }>;
-  onClick?: () => void;
-  type?: 'button' | 'submit';
-  className?: string;
-  loading?: boolean;
-  'aria-label'?: string;
+	children?: React.ReactNode;
+	variant?: 'primary' | 'secondary' | 'danger' | 'success';
+	size?: 'sm' | 'md' | 'lg';
+	disabled?: boolean;
+	icon?: React.ComponentType<{ className?: string }>;
+	onClick?: () => void;
+	type?: 'button' | 'submit';
+	className?: string;
+	loading?: boolean;
+	'aria-label'?: string;
 }
 
 export interface LoadingSpinnerProps {
