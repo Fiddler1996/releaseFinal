@@ -1,36 +1,36 @@
 import React from 'react';
-import { useCalendar, useTimeBlocks } from '../../store/hooks';
-import { Button } from '../ui/Button';
+import { useCalendar, useNavigation } from '../../store/hooks';
+import { Button } from '../ui';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
-import { formatFullDate } from '../../utils/formatters';
+import { formatDate } from '../../utils/formatters';
+import type { CalendarEvent } from '../../types';
 
 const ScheduleView: React.FC = () => {
-  const { currentDate, goToPreviousDay, goToNextDay, goToToday, setActiveView } = useCalendar();
-  const { getEventsForDate } = useTimeBlocks();
-
+  const { currentDate, navigateCalendar, goToToday, getEventsForDate } = useCalendar();
+  const { setActiveView } = useNavigation();
   const eventsForDay = getEventsForDate(currentDate);
 
   return (
     <div className="flex flex-col h-full">
       {/* Навигация по дням */}
       <div className="flex items-center justify-between p-2 border-b">
-        <Button variant="ghost" onClick={goToPreviousDay}>
+        <Button onClick={() => navigateCalendar('prev')}>
           <ChevronLeft className="w-4 h-4" />
         </Button>
 
         <div className="text-sm font-medium">
-          {formatFullDate(new Date(currentDate))}
+          {formatDate(new Date(currentDate), 'long')}
         </div>
 
-        <Button variant="ghost" onClick={goToNextDay}>
+        <Button onClick={() => navigateCalendar('next')}>
           <ChevronRight className="w-4 h-4" />
         </Button>
       </div>
 
       {/* Быстрые действия */}
       <div className="flex items-center justify-between p-2 border-b">
-        <Button variant="secondary" onClick={goToToday}>Сегодня</Button>
-        <Button variant="secondary" onClick={() => setActiveView('calendar')}>
+        <Button onClick={goToToday}>Сегодня</Button>
+        <Button onClick={() => setActiveView('calendar')}>
           <Calendar className="w-4 h-4 mr-1" /> Календарь
         </Button>
       </div>
@@ -38,7 +38,7 @@ const ScheduleView: React.FC = () => {
       {/* Список событий */}
       <div className="flex-1 overflow-y-auto p-2">
         {eventsForDay.length > 0 ? (
-          eventsForDay.map((event) => (
+          eventsForDay.map((event: CalendarEvent) => (
             <div
               key={event.id}
               className="border rounded p-2 mb-2 bg-white shadow-sm hover:bg-gray-50 transition"

@@ -23,11 +23,18 @@ import {
   formatNumber,
   formatPercent,
   formatDuration,
-  getTypeColor,
-  getTypeIcon,
   formatDate
 } from '../../utils';
+import { EVENT_TYPE_CONFIGS } from '../../utils/constants';
 import type { TimeBlockType } from '../../types';
+
+const getTypeColor = (type: TimeBlockType) => {
+  const cfg = EVENT_TYPE_CONFIGS[type];
+  const [bgClass] = cfg.color.split(' ');
+  return { bg: bgClass };
+};
+
+const getTypeIcon = (type: TimeBlockType) => EVENT_TYPE_CONFIGS[type].icon;
 
 /**
  * Аналитический вид с метриками и статистикой
@@ -660,7 +667,6 @@ export const AnalyticsView: React.FC = () => {
       </div>
     </div>
   );
-};// components/views/AnalyticsView.tsx
-import React, { useState, useMemo } from 'react';
-import {
-  
+};
+
+export default AnalyticsView;  
