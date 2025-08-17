@@ -1,5 +1,5 @@
 // components/layout/Header.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Calendar, 
   List, 
@@ -13,9 +13,12 @@ import {
   ChevronDown,
   Flame,
   Leaf,
-  ClipboardList
+  ClipboardList,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useNavigation, useNotifications, useSettings } from '../../store/hooks';
+import { useTheme } from '../../store/hooks';
 import { Button } from '../ui';
 import type { ViewType, AppMode } from '../../types';
 
@@ -26,8 +29,11 @@ export const Header: React.FC = () => {
   const { activeView, mode, setActiveView, setMode } = useNavigation();
   const { notifications, removeNotification, clearAllNotifications } = useNotifications();
   const { settings, toggleNotifications } = useSettings();
+  const { initTheme, toggleTheme } = useTheme();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+
+  useEffect(() => { initTheme(); }, []);
 
   // Иконки для видов
   const viewIcons: Record<ViewType, React.ComponentType<{ className?: string }>> = {
@@ -149,6 +155,14 @@ export const Header: React.FC = () => {
 
         {/* Уведомления и настройки */}
         <div className="flex items-center space-x-2">
+          {/* Переключатель темы */}
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={toggleTheme}
+            icon={settings.animationsEnabled ? Sun : Moon}
+            aria-label="Переключить тему"
+          />
           {/* Уведомления */}
           <div className="relative">
             <Button

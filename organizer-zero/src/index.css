@@ -13,7 +13,21 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  @apply bg-gray-900 text-white;
+}
+
+:root {
+  --bg: #0f172a; /* slate-900 */
+  --fg: #ffffff;
+}
+
+.dark :root {
+  --bg: #0f172a;
+  --fg: #ffffff;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--fg);
 }
 
 .line-clamp-2 {

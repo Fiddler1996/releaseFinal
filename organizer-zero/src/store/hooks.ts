@@ -309,3 +309,45 @@ export const useAnalytics = () => {
 
   return analytics;
 };
+
+// ==== THEME HOOK ====
+
+/**
+ * Хук для управления темой (light/dark)
+ */
+export const useTheme = () => {
+  const getStored = () => {
+    try { return localStorage.getItem('theme') as 'light' | 'dark' | null; } catch { return null; }
+  };
+
+  const applyTheme = (theme: 'light' | 'dark') => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    try { localStorage.setItem('theme', theme); } catch {}
+  };
+
+  const init = () => {
+    const stored = getStored();
+    if (stored) {
+      applyTheme(stored);
+      return stored;
+    }
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme: 'light' | 'dark' = prefersDark ? 'dark' : 'light';
+    applyTheme(theme);
+    return theme;
+  };
+
+  const toggle = () => {
+    const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    return next;
+  };
+
+  return { initTheme: init, toggleTheme: toggle };
+};
