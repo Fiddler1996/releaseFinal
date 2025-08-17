@@ -12,13 +12,20 @@ const AppContent: React.FC = () => {
 
   useEffect(() => {
     // Проверяем текущую тему
-    setIsDarkTheme(document.documentElement.classList.contains('dark'));
+    const checkTheme = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      setIsDarkTheme(isDark);
+      console.log('App - Current theme:', isDark ? 'dark' : 'light');
+      console.log('HTML classes:', document.documentElement.className);
+    };
+    
+    checkTheme();
     
     // Слушаем изменения темы
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          setIsDarkTheme(document.documentElement.classList.contains('dark'));
+          checkTheme();
         }
       });
     });

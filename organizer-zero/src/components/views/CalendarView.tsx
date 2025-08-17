@@ -23,13 +23,19 @@ const CalendarView: React.FC = () => {
   useEffect(() => {
     setCalendarView('month');
     // Проверяем текущую тему
-    setIsDarkTheme(document.documentElement.classList.contains('dark'));
+    const checkTheme = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      setIsDarkTheme(isDark);
+      console.log('CalendarView - Current theme:', isDark ? 'dark' : 'light');
+    };
+    
+    checkTheme();
     
     // Слушаем изменения темы
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          setIsDarkTheme(document.documentElement.classList.contains('dark'));
+          checkTheme();
         }
       });
     });
@@ -136,6 +142,14 @@ const CalendarView: React.FC = () => {
     <div className={`flex flex-col h-full ${
       isDarkTheme ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'
     }`}>
+      {/* Debug theme info */}
+      <div className={`p-2 text-xs ${
+        isDarkTheme ? 'bg-red-800 text-white' : 'bg-red-100 text-red-800'
+      }`}>
+        ТЕМА: {isDarkTheme ? 'ТЕМНАЯ' : 'СВЕТЛАЯ'} | 
+        HTML классы: {document.documentElement.className}
+      </div>
+      
       <div className={`flex items-center justify-between p-2 border-b ${
         isDarkTheme ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
       }`}>
@@ -215,6 +229,21 @@ const CalendarView: React.FC = () => {
         isDarkTheme ? 'bg-gray-800' : 'bg-white'
       }`}>
         <Button onClick={goToToday}>Сегодня</Button>
+        <Button 
+          onClick={() => {
+            const root = document.documentElement;
+            const isDark = root.classList.contains('dark');
+            if (isDark) {
+              root.classList.remove('dark');
+            } else {
+              root.classList.add('dark');
+            }
+            console.log('Manual theme toggle, new classes:', root.className);
+          }}
+          className="ml-2 bg-purple-500 hover:bg-purple-600 text-white"
+        >
+          Тест темы
+        </Button>
       </div>
 
       <div className={`grid grid-cols-7 text-xs font-medium text-center border-b ${

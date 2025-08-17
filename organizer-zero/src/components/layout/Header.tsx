@@ -38,13 +38,19 @@ export const Header: React.FC = () => {
   useEffect(() => { 
     initTheme(); 
     // Проверяем текущую тему
-    setIsDarkTheme(document.documentElement.classList.contains('dark'));
+    const checkTheme = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      setIsDarkTheme(isDark);
+      console.log('Current theme:', isDark ? 'dark' : 'light');
+    };
+    
+    checkTheme();
     
     // Слушаем изменения темы
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          setIsDarkTheme(document.documentElement.classList.contains('dark'));
+          checkTheme();
         }
       });
     });
@@ -52,7 +58,14 @@ export const Header: React.FC = () => {
     observer.observe(document.documentElement, { attributes: true });
     
     return () => observer.disconnect();
-  }, []);
+  }, [initTheme]);
+
+  const handleThemeToggle = () => {
+    console.log('Toggling theme from:', isDarkTheme ? 'dark' : 'light');
+    const newTheme = toggleTheme();
+    console.log('New theme:', newTheme);
+    setIsDarkTheme(newTheme === 'dark');
+  };
 
   // Иконки для видов
   const viewIcons: Record<ViewType, React.ComponentType<{ className?: string }>> = {
@@ -192,10 +205,15 @@ export const Header: React.FC = () => {
           <Button
             variant="secondary"
             size="sm"
-            onClick={toggleTheme}
+            onClick={handleThemeToggle}
             icon={isDarkTheme ? Sun : Moon}
             aria-label="Переключить тему"
-          />
+            className="bg-blue-500 hover:bg-blue-600 text-white"
+          >
+            <span className="ml-2 text-xs">
+              {isDarkTheme ? 'Светлая' : 'Темная'}
+            </span>
+          </Button>
           {/* Домой */}
           <Button
             variant="secondary"
@@ -298,30 +316,9 @@ export const Header: React.FC = () => {
                     ))
                   )}
                 </div>
-
-                <div className="p-4 border-t border-gray-700 bg-gray-750">
-                  <label className="flex items-center space-x-2 text-sm text-gray-300">
-                    <input
-                      type="checkbox"
-                      checked={settings.notificationsEnabled}
-                      onChange={toggleNotifications}
-                      className="rounded"
-                    />
-                    <span>Включить уведомления</span>
-                  </label>
-                </div>
               </div>
             )}
           </div>
-
-          {/* Быстрые настройки */}
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => handleViewChange('profile')}
-            icon={Settings}
-            aria-label="Настройки"
-          />
 
           {/* Мобильное меню */}
           <Button

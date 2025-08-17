@@ -147,7 +147,7 @@ export const Footer: React.FC = () => {
           <div className="flex items-center space-x-2">
             <Button
               onClick={handleQuickAdd}
-              disabled={loading}
+              disabled={loading.isLoading}
               icon={Plus}
               size="sm"
               className="bg-blue-600 hover:bg-blue-700 text-white"
