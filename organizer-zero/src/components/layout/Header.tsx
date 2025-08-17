@@ -303,7 +303,7 @@ export const Header: React.FC = () => {
                         key={modeOption}
                         size="sm"
                         onClick={() => handleModeChange(modeOption)}
-                        className={`flex items-center space-x-1 px-3 py-2 rounded ${
+                        className={`h-10 min-w-[110px] justify-center px-3 rounded ${
                           isActive 
                             ? `${modeColor.bg} text-white` 
                             : 'bg-gray-700 text-gray-300 hover:text-white hover:bg-gray-600'
@@ -332,14 +332,14 @@ export const Header: React.FC = () => {
                     key={view}
                     variant={isActive ? 'primary' : 'secondary'}
                     onClick={() => handleViewChange(view)}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 text-left ${
+                    className={`w-full h-12 flex items-center space-x-3 px-4 text-left ${
                       isActive ? 'bg-blue-600 text-white' : 'bg-gray-700 hover:bg-gray-600'
                     }`}
                   >
                     <IconComponent className="w-5 h-5" />
-                    <div>
-                      <div className="font-medium">{config?.title || view}</div>
-                      <div className="text-sm opacity-75">{config?.description || ''}</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium truncate">{config?.title || view}</div>
+                      <div className="text-sm opacity-75 truncate">{config?.description || ''}</div>
                     </div>
                   </Button>
                 );
