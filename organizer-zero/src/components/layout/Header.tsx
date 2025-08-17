@@ -115,32 +115,36 @@ export const Header: React.FC = () => {
         </nav>
 
         {/* Режимы работы */}
-        <div className="hidden md:flex items-center space-x-2 bg-gray-700 rounded-lg p-1">
-          {(['focus', 'relax', 'planning'] as AppMode[]).map((modeOption) => {
-            const IconComponent = modeIcons[modeOption];
-            const isActive = mode === modeOption;
-            const modeColor = getModeColor(modeOption);
+        <div className="hidden md:flex items-center mx-4">
+          <span className="text-xs text-gray-400 mr-2">Режим:</span>
+          <div className="flex items-center bg-gray-700 rounded-xl px-2 py-1 gap-2 h-10">
+            {(['focus', 'relax', 'planning'] as AppMode[]).map((modeOption) => {
+              const IconComponent = modeIcons[modeOption];
+              const isActive = mode === modeOption;
+              const modeColor = getModeColor(modeOption);
 
-            return (
-              <Button
-                key={modeOption}
-                size="sm"
-                onClick={() => handleModeChange(modeOption)}
-                className={`flex items-center space-x-1 px-3 py-1 rounded transition-colors ${
-                  isActive 
-                    ? `${modeColor.bg} text-white` 
-                    : 'text-gray-300 hover:text-white hover:bg-gray-600'
-                }`}
-                aria-label={`Переключить в режим ${modeOption}`}
-              >
-                <IconComponent className="w-4 h-4" />
-                <span className="hidden lg:inline capitalize">
-                  {modeOption === 'focus' ? 'Фокус' : 
-                   modeOption === 'relax' ? 'Отдых' : 'Планирование'}
-                </span>
-              </Button>
-            );
-          })}
+              return (
+                <Button
+                  key={modeOption}
+                  size="sm"
+                  onClick={() => handleModeChange(modeOption)}
+                  className={`h-8 px-3 rounded-md ${
+                    isActive 
+                      ? `${modeColor.bg} text-white` 
+                      : 'text-gray-300 hover:text-white hover:bg-gray-600'
+                  }`}
+                  aria-label={`Переключить в режим ${modeOption}`}
+                  aria-pressed={isActive}
+                >
+                  <IconComponent className="w-4 h-4" />
+                  <span className="text-xs font-medium capitalize">
+                    {modeOption === 'focus' ? 'Фокус' : 
+                     modeOption === 'relax' ? 'Отдых' : 'Планирование'}
+                  </span>
+                </Button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Уведомления и настройки */}
