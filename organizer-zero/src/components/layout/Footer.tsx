@@ -163,15 +163,15 @@ export const Footer: React.FC = () => {
           )}
 
           {/* Правая часть - информация о приложении */}
-          <div className="flex items-center space-x-4 text-sm text-gray-400">
+          <div className="flex-1 flex flex-col items-center text-sm text-gray-400">
             {/* Версия и статус */}
-            <div className="hidden lg:flex items-center space-x-2">
+            <div className="hidden lg:flex items-center space-x-2 mb-2">
               <span>Organizer Zero v3.4</span>
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" title="Онлайн"></span>
             </div>
 
             {/* Ссылки */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center justify-center space-x-4">
               <button
                 onClick={() => window.open('https://github.com/organizer-zero', '_blank')}
                 className="hover:text-white transition-colors flex items-center space-x-1"
@@ -199,7 +199,7 @@ export const Footer: React.FC = () => {
             </div>
 
             {/* Время последнего обновления */}
-            <div className="hidden xl:block text-xs">
+            <div className="hidden xl:block text-xs mt-2">
               Обновлено: {new Date().toLocaleTimeString('ru-RU', {
                 hour: '2-digit',
                 minute: '2-digit'
