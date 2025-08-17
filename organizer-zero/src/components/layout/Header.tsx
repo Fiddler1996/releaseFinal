@@ -15,7 +15,8 @@ import {
   Leaf,
   ClipboardList,
   Sun,
-  Moon
+  Moon,
+  Home
 } from 'lucide-react';
 import { useNavigation, useNotifications, useSettings } from '../../store/hooks';
 import { useTheme } from '../../store/hooks';
@@ -162,6 +163,14 @@ export const Header: React.FC = () => {
             onClick={toggleTheme}
             icon={settings.animationsEnabled ? Sun : Moon}
             aria-label="Переключить тему"
+          />
+          {/* Домой */}
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => handleViewChange('calendar')}
+            icon={Home}
+            aria-label="Домой"
           />
           {/* Уведомления */}
           <div className="relative">
