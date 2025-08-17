@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCalendar } from '../../store/hooks';
 import { addDays, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth } from 'date-fns';
 import { Button } from '../ui';
@@ -16,6 +16,9 @@ const CalendarView: React.FC = () => {
     getEventsForDate
   } = useCalendar();
 
+  const [popoverDate, setPopoverDate] = useState<Date | null>(null);
+  const [popoverPos, setPopoverPos] = useState<{ x: number; y: number } | null>(null);
+
   useEffect(() => {
     setCalendarView('month');
   }, [setCalendarView]);
@@ -26,9 +29,13 @@ const CalendarView: React.FC = () => {
   const startDate = startOfWeek(monthStart, { weekStartsOn: 1 });
   const endDate = endOfWeek(monthEnd, { weekStartsOn: 1 });
 
-  const handleDateClick = (date: Date) => {
-    setCurrentDate(date.toISOString().split('T')[0]);
-    setCalendarView('day');
+  const handleDateClick = (date: Date, event?: React.MouseEvent) => {
+    // Открываем поповер со списком событий
+    setPopoverDate(date);
+    if (event) {
+      const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+      setPopoverPos({ x: rect.left + rect.width / 2, y: rect.top + window.scrollY });
+    }
   };
 
   const rows: React.ReactNode[] = [];
@@ -52,7 +59,7 @@ const CalendarView: React.FC = () => {
           role="button"
           aria-selected={isSelected}
           tabIndex={0}
-          onClick={() => handleDateClick(clone)}
+          onClick={(e) => handleDateClick(clone, e)}
           className={`flex flex-col p-1 border cursor-pointer transition-all duration-100 
             ${isCurrentMonth ? '' : 'opacity-40'} 
             ${isToday ? 'bg-blue-200/40' : ''} 
@@ -114,7 +121,40 @@ const CalendarView: React.FC = () => {
         <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Вс</div>
       </div>
 
-      <div className="flex-1 overflow-y-auto">{rows}</div>
+      <div className="relative flex-1 overflow-y-auto">
+        {rows}
+        {popoverDate && (
+          <div className="fixed inset-0 z-40" onClick={() => { setPopoverDate(null); setPopoverPos(null); }} />
+        )}
+        {popoverDate && popoverPos && (
+          <div
+            className="absolute z-50 bg-white text-gray-900 rounded-lg shadow-xl border border-gray-200 w-72 p-3"
+            style={{ left: Math.max(8, popoverPos.x - 144), top: 56 }}
+            role="dialog"
+            aria-label="События дня"
+          >
+            <div className="flex items-center justify-between mb-2">
+              <div className="font-semibold text-sm">
+                {popoverDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </div>
+              <button className="text-gray-500 hover:text-gray-700" onClick={() => { setPopoverDate(null); setPopoverPos(null); }}>×</button>
+            </div>
+            <div className="max-h-64 overflow-y-auto space-y-2">
+              {getEventsForDate(popoverDate.toISOString().split('T')[0]).length === 0 ? (
+                <div className="text-sm text-gray-500">Нет событий</div>
+              ) : (
+                getEventsForDate(popoverDate.toISOString().split('T')[0]).map((ev) => (
+                  <div key={ev.id} className="border border-gray-200 rounded p-2">
+                    <div className="text-sm font-medium text-gray-900 truncate">{ev.title}</div>
+                    <div className="text-xs text-gray-600">{ev.start} — {ev.end}</div>
+                    {ev.description && <div className="text-xs text-gray-500 mt-1 line-clamp-2">{ev.description}</div>}
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
