@@ -164,7 +164,7 @@ export const EVENT_TYPE_CONFIGS = {
   free: {
     label: 'Свободное время',
     color: 'bg-indigo-900/30 text-indigo-400 border-indigo-700',
-    icon: '🎯',
+    icon: '✨',
     priority: 'low'
   }
 } as const;

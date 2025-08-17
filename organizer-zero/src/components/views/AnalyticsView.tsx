@@ -372,7 +372,7 @@ export const AnalyticsView: React.FC = () => {
                 <div className="text-white font-medium">Первые шаги</div>
                 <div className="text-sm text-gray-400">Создано первое событие</div>
               </div>
-              <div className="text-2xl">🎯</div>
+              <div className="text-2xl"></div>
             </div>
 
             {/* Продуктивность */}
