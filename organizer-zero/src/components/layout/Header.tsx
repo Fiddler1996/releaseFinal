@@ -88,8 +88,8 @@ export const Header: React.FC = () => {
       <div className="flex items-center justify-between p-4">
         {/* Logo и заголовок */}
         <div className="flex items-center space-x-4">
-          <div className="text-2xl font-bold text-white">
-            🎯 Organizer Zero
+          <div className="text-2xl font-bold text-white leading-none">
+            Organizer Zero
           </div>
           <div className="hidden sm:block text-sm text-gray-400">
             v3.4 Модульная архитектура
