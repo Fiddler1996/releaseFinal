@@ -16,13 +16,12 @@ body {
 }
 
 :root {
-  /* Single dark theme by default */
   --bg: #0f172a; /* slate-900 */
-  --fg: #ffffff; /* white text */
+  --fg: #ffffff;
 }
 
-.dark {
-  --bg: #0f172a; /* slate-900 */
+.dark :root {
+  --bg: #0f172a;
   --fg: #ffffff;
 }
 
