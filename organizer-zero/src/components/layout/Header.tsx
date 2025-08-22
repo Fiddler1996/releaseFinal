@@ -14,8 +14,6 @@ import {
   Flame,
   Leaf,
   ClipboardList,
-  Sun,
-  Moon,
   Home
 } from 'lucide-react';
 import { useNavigation, useNotifications, useSettings } from '../../store/hooks';
