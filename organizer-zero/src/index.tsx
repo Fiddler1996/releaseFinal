@@ -3,16 +3,10 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 
-// Регистрация Service Worker для PWA
+// Отключаем и удаляем любой существующий Service Worker, чтобы избежать устаревшего кэша
 if ('serviceWorker' in navigator) {
-	window.addEventListener('load', () => {
-		navigator.serviceWorker.register('/service-worker.js')
-			.then((registration) => {
-				console.log('SW registered: ', registration);
-			})
-			.catch((registrationError) => {
-				console.log('SW registration failed: ', registrationError);
-			});
+	navigator.serviceWorker.getRegistrations().then(registrations => {
+		registrations.forEach(reg => reg.unregister());
 	});
 }
 
