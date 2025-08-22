@@ -43,67 +43,63 @@ export const Footer: React.FC = () => {
     goToToday();
   };
 
-  const handleCalendarClick = () => {
-    setActiveView('calendar');
-  };
-
   const handleAnalyticsClick = () => {
     setActiveView('analytics');
   };
 
   return (
-    <footer className="bg-gray-800 border-t border-gray-700 mt-auto">
+    <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto">
       <div className="p-4">
         {/* Статистика */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-4">
           {/* Общая статистика */}
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-1 text-blue-400">
+            <div className="flex items-center justify-center space-x-1 text-blue-600 dark:text-blue-400">
               <Calendar className="w-4 h-4" />
               <span className="text-lg font-semibold">{formatNumber(analytics.totalEvents)}</span>
             </div>
-            <div className="text-xs text-gray-400">Всего событий</div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">Всего событий</div>
           </div>
 
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-1 text-green-400">
+            <div className="flex items-center justify-center space-x-1 text-green-600 dark:text-green-400">
               <CheckCircle className="w-4 h-4" />
               <span className="text-lg font-semibold">{formatNumber(analytics.completedEvents)}</span>
             </div>
-            <div className="text-xs text-gray-400">Выполнено</div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">Выполнено</div>
           </div>
 
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-1 text-yellow-400">
+            <div className="flex items-center justify-center space-x-1 text-yellow-600 dark:text-yellow-400">
               <Clock className="w-4 h-4" />
               <span className="text-lg font-semibold">{analytics.completionRate}%</span>
             </div>
-            <div className="text-xs text-gray-400">Процент выполнения</div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">Процент выполнения</div>
           </div>
 
           {/* События сегодня и завтра */}
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-1 text-purple-400">
+            <div className="flex items-center justify-center space-x-1 text-purple-600 dark:text-purple-400">
               <Zap className="w-4 h-4" />
               <span className="text-lg font-semibold">{formatNumber(analytics.todayEvents)}</span>
             </div>
-            <div className="text-xs text-gray-400">Сегодня</div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">Сегодня</div>
           </div>
 
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-1 text-indigo-400">
+            <div className="flex items-center justify-center space-x-1 text-indigo-600 dark:text-indigo-400">
               <Coffee className="w-4 h-4" />
               <span className="text-lg font-semibold">{formatNumber(analytics.tomorrowEvents)}</span>
             </div>
-            <div className="text-xs text-gray-400">Завтра</div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">Завтра</div>
           </div>
 
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-1 text-pink-400">
+            <div className="flex items-center justify-center space-x-1 text-pink-600 dark:text-pink-400">
               <Heart className="w-4 h-4" />
               <span className="text-lg font-semibold">{formatNumber(analytics.practiceEvents)}</span>
             </div>
-            <div className="text-xs text-gray-400">Практика</div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">Практика</div>
           </div>
         </div>
 
@@ -133,15 +129,7 @@ export const Footer: React.FC = () => {
               <span className="hidden sm:inline">Сегодня</span>
             </Button>
 
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={handleCalendarClick}
-              icon={Calendar}
-              aria-label="Открыть календарь"
-            >
-              <span className="hidden md:inline">Календарь</span>
-            </Button>
+            {/* Убраны две избыточные кнопки с иконкой календаря */}
 
             <Button
               variant="secondary"
@@ -156,25 +144,25 @@ export const Footer: React.FC = () => {
 
           {/* Центральная часть - статус загрузки */}
           {loading.isLoading && (
-            <div className="flex items-center space-x-2 text-blue-400">
+            <div className="flex items-center space-x-2 text-blue-600 dark:text-blue-400">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current"></div>
               <span className="text-sm">{loading.loadingText || 'Загрузка...'}</span>
             </div>
           )}
 
           {/* Правая часть - информация о приложении */}
-          <div className="flex-1 flex flex-col items-center text-sm text-gray-400">
+          <div className="flex-1 flex flex-col items-center text-sm text-gray-600 dark:text-gray-400">
             {/* Версия и статус */}
             <div className="hidden lg:flex items-center space-x-2 mb-2">
               <span>Organizer Zero v3.4</span>
-              <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" title="Онлайн"></span>
+              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" title="Онлайн"></span>
             </div>
 
             {/* Ссылки */}
             <div className="flex items-center justify-center space-x-4">
               <button
                 onClick={() => window.open('https://github.com/organizer-zero', '_blank')}
-                className="hover:text-white transition-colors flex items-center space-x-1"
+                className="hover:text-gray-900 dark:hover:text-white transition-colors flex items-center space-x-1"
                 aria-label="GitHub репозиторий"
               >
                 <Github className="w-4 h-4" />
@@ -183,7 +171,7 @@ export const Footer: React.FC = () => {
               
               <button
                 onClick={() => setActiveView('roadmap')}
-                className="hover:text-white transition-colors"
+                className="hover:text-gray-900 dark:hover:text-white transition-colors"
                 aria-label="Открыть роадмап"
               >
                 Роадмап
@@ -191,7 +179,7 @@ export const Footer: React.FC = () => {
               
               <button
                 onClick={() => setActiveView('profile')}
-                className="hover:text-white transition-colors"
+                className="hover:text-gray-900 dark:hover:text-white transition-colors"
                 aria-label="Открыть справку"
               >
                 Справка
@@ -210,12 +198,12 @@ export const Footer: React.FC = () => {
 
         {/* Прогресс бар выполнения задач (если есть события) */}
         {analytics.totalEvents > 0 && (
-          <div className="mt-3 pt-3 border-t border-gray-700">
-            <div className="flex items-center justify-between text-xs text-gray-400 mb-1">
+          <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
               <span>Прогресс выполнения</span>
               <span>{formatPercent(analytics.completedEvents, analytics.totalEvents)}</span>
             </div>
-            <div className="w-full bg-gray-700 rounded-full h-2">
+            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
               <div 
                 className="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${analytics.completionRate}%` }}
@@ -225,13 +213,13 @@ export const Footer: React.FC = () => {
         )}
 
         {/* Подсказки для клавиатуры (для десктопа) */}
-        <div className="hidden xl:block mt-3 pt-3 border-t border-gray-700">
-          <div className="flex items-center justify-center space-x-6 text-xs text-gray-500">
-            <span><kbd className="px-1 bg-gray-700 rounded">N</kbd> Новое событие</span>
-            <span><kbd className="px-1 bg-gray-700 rounded">T</kbd> Сегодня</span>
-            <span><kbd className="px-1 bg-gray-700 rounded">F</kbd> Поиск</span>
-            <span><kbd className="px-1 bg-gray-700 rounded">Q/W/E</kbd> Режимы</span>
-            <span><kbd className="px-1 bg-gray-700 rounded">←/→</kbd> Навигация</span>
+        <div className="hidden xl:block mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-center space-x-6 text-xs text-gray-500 dark:text-gray-500">
+            <span><kbd className="px-1 bg-gray-200 dark:bg-gray-700 rounded">N</kbd> Новое событие</span>
+            <span><kbd className="px-1 bg-gray-200 dark:bg-gray-700 rounded">T</kbd> Сегодня</span>
+            <span><kbd className="px-1 bg-gray-200 dark:bg-gray-700 rounded">F</kbd> Поиск</span>
+            <span><kbd className="px-1 bg-gray-200 dark:bg-gray-700 rounded">Q/W/E</kbd> Режимы</span>
+            <span><kbd className="px-1 bg-gray-200 dark:bg-gray-700 rounded">←/→</kbd> Навигация</span>
           </div>
         </div>
       </div>

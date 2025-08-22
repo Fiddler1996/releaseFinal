@@ -16,12 +16,12 @@ body {
 }
 
 :root {
-  --bg: #0f172a; /* slate-900 */
-  --fg: #ffffff;
+  --bg: #f8fafc; /* slate-50 for light */
+  --fg: #0f172a; /* slate-900 for light */
 }
 
-.dark :root {
-  --bg: #0f172a;
+.dark {
+  --bg: #0f172a; /* slate-900 */
   --fg: #ffffff;
 }
 
