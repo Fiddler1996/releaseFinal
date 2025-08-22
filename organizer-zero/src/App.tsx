@@ -27,7 +27,7 @@ const AppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-6">
         {renderCurrentView()}
