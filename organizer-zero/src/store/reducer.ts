@@ -1,6 +1,12 @@
 // store/reducer.ts
 import type { AppState, AppAction, TimeBlock, Notification } from '../types';
 
+// Normalize date -> YYYY-MM-DD using local noon to avoid timezone shifts
+const toDateKey = (date: Date): string => {
+  const normalized = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12, 0, 0);
+  return normalized.toISOString().split('T')[0];
+};
+
 // ==== INITIAL STATE ====
 export const initialState: AppState = {
   timeBlocks: [
@@ -9,7 +15,7 @@ export const initialState: AppState = {
       title: 'Утренняя практика фортепиано',
       start: '09:00',
       end: '10:30',
-      date: new Date().toISOString().split('T')[0],
+      date: toDateKey(new Date()),
       type: 'practice',
       description: 'Работа над гаммами и этюдами Черни',
       location: 'Музыкальная комната',
@@ -31,7 +37,7 @@ export const initialState: AppState = {
     }
   ],
   mode: 'planning',
-  currentDate: new Date().toISOString().split('T')[0],
+  currentDate: toDateKey(new Date()),
   activeView: 'calendar',
   selectedTimeBlock: null,
   isEditModalOpen: false,
@@ -206,7 +212,7 @@ export const appReducer = (state: AppState, action: AppAction): AppState => {
       return { 
         ...state, 
         calendarDate: action.payload,
-        currentDate: action.payload.toISOString().split('T')[0]
+        currentDate: toDateKey(action.payload)
       };
 
     case 'SET_CALENDAR_VIEW':
@@ -233,7 +239,7 @@ export const appReducer = (state: AppState, action: AppAction): AppState => {
       return {
         ...state,
         calendarDate: newDate,
-        currentDate: newDate.toISOString().split('T')[0]
+        currentDate: toDateKey(newDate)
       };
     }
 
@@ -242,7 +248,7 @@ export const appReducer = (state: AppState, action: AppAction): AppState => {
       return {
         ...state,
         calendarDate: today,
-        currentDate: today.toISOString().split('T')[0]
+        currentDate: toDateKey(today)
       };
     }
 
@@ -250,7 +256,7 @@ export const appReducer = (state: AppState, action: AppAction): AppState => {
       return {
         ...state,
         calendarDate: action.payload,
-        currentDate: action.payload.toISOString().split('T')[0]
+        currentDate: toDateKey(action.payload)
       };
     }
 
