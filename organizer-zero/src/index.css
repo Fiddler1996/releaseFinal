@@ -16,8 +16,9 @@ body {
 }
 
 :root {
-  --bg: #f8fafc; /* slate-50 for light */
-  --fg: #0f172a; /* slate-900 for light */
+  /* Single dark theme by default */
+  --bg: #0f172a; /* slate-900 */
+  --fg: #ffffff; /* white text */
 }
 
 .dark {

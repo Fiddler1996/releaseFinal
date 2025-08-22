@@ -30,7 +30,7 @@ export const Header: React.FC = () => {
   const { activeView, mode, setActiveView, setMode } = useNavigation();
   const { notifications, removeNotification, clearAllNotifications } = useNotifications();
   const { settings, toggleNotifications } = useSettings();
-  const { initTheme, toggleTheme } = useTheme();
+  const { initTheme } = useTheme();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -156,14 +156,6 @@ export const Header: React.FC = () => {
 
         {/* Уведомления и настройки */}
         <div className="flex items-center space-x-2">
-          {/* Переключатель темы */}
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={toggleTheme}
-            icon={settings.animationsEnabled ? Sun : Moon}
-            aria-label="Переключить тему"
-          />
           {/* Домой */}
           <Button
             variant="secondary"
