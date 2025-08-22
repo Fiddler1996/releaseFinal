@@ -87,6 +87,8 @@ export const Header: React.FC = () => {
     return colors[modeType];
   };
 
+  const modeBarClass = mode === 'focus' ? 'bg-red-600' : mode === 'relax' ? 'bg-green-600' : 'bg-blue-600';
+
   return (
     <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 mb-6">
       <div className="flex items-center justify-between p-4">
@@ -290,6 +292,7 @@ export const Header: React.FC = () => {
           />
         </div>
       </div>
+      <div className={`h-1 w-full ${modeBarClass}`}></div>
 
       {/* Мобильная навигация */}
       {showMobileMenu && (

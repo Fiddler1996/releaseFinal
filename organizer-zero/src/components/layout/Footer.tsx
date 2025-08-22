@@ -21,7 +21,7 @@ export const Footer: React.FC = () => {
   const analytics = useAnalytics();
   const { addTimeBlock, loading } = useTimeBlocks();
   const { goToToday } = useCalendar();
-  const { setActiveView } = useNavigation();
+  const { setActiveView, mode } = useNavigation();
 
   const handleQuickAdd = () => {
     const now = new Date();
@@ -38,18 +38,15 @@ export const Footer: React.FC = () => {
     });
   };
 
-  const handleTodayClick = () => {
-    setActiveView('calendar');
-    goToToday();
-  };
-
-  const handleCalendarClick = () => {
-    setActiveView('calendar');
-  };
-
   const handleAnalyticsClick = () => {
     setActiveView('analytics');
   };
+
+  const progressGradient = mode === 'focus'
+    ? 'from-red-500 to-orange-500'
+    : mode === 'relax'
+    ? 'from-green-500 to-teal-500'
+    : 'from-blue-500 to-indigo-500';
 
   return (
     <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto">
@@ -126,26 +123,6 @@ export const Footer: React.FC = () => {
             <Button
               variant="secondary"
               size="sm"
-              onClick={handleTodayClick}
-              icon={Clock}
-              aria-label="Перейти к сегодняшнему дню в календаре"
-            >
-              <span className="hidden sm:inline">Сегодня</span>
-            </Button>
-
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={handleCalendarClick}
-              icon={Calendar}
-              aria-label="Открыть календарь"
-            >
-              <span className="hidden md:inline">Календарь</span>
-            </Button>
-
-            <Button
-              variant="secondary"
-              size="sm"
               onClick={handleAnalyticsClick}
               icon={Zap}
               aria-label="Открыть аналитику"
@@ -217,7 +194,7 @@ export const Footer: React.FC = () => {
             </div>
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
               <div 
-                className="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full transition-all duration-300"
+                className={`bg-gradient-to-r ${progressGradient} h-2 rounded-full transition-all duration-300`}
                 style={{ width: `${analytics.completionRate}%` }}
               ></div>
             </div>
