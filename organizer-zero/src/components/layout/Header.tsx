@@ -217,7 +217,7 @@ export const Header: React.FC = () => {
                         key={notification.id}
                         className="p-4 border-b border-gray-700 last:border-b-0 hover:bg-gray-700"
                       >
-                        <div className="flex justify-between items-start">
+                        <div className="flex justify между items-start">
                           <div className="flex-1">
                             <div className={`text-sm font-medium text-center ${
                               notification.type === 'error' ? 'text-red-400' :
@@ -251,7 +251,7 @@ export const Header: React.FC = () => {
                   )}
                 </div>
 
-                <div className="p-4 border-t border-gray-700 bg-gray-750">
+                <div className="p-4 border-т border-gray-700 bg-gray-750">
                   <label className="flex items-center space-x-2 text-sm text-gray-300">
                     <input
                       type="checkbox"
