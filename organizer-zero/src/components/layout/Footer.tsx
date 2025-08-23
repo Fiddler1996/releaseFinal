@@ -2,7 +2,7 @@
 import React from 'react';
 import { 
   Clock, 
-  Calendar, 
+  Calendar,
   CheckCircle, 
   Plus, 
   Zap, 
@@ -10,7 +10,7 @@ import {
   Coffee,
   Github
 } from 'lucide-react';
-import { useAnalytics, useTimeBlocks, useCalendar, useNavigation } from '../../store/hooks';
+import { useAnalytics, useTimeBlocks, useNavigation } from '../../store/hooks';
 import { Button } from '../ui';
 import { formatNumber, formatPercent } from '../../utils/formatters';
 
@@ -20,7 +20,6 @@ import { formatNumber, formatPercent } from '../../utils/formatters';
 export const Footer: React.FC = () => {
   const analytics = useAnalytics();
   const { addTimeBlock, loading } = useTimeBlocks();
-  const { goToToday } = useCalendar();
   const { setActiveView } = useNavigation();
 
   const handleQuickAdd = () => {
@@ -36,15 +35,6 @@ export const Footer: React.FC = () => {
       type: 'personal',
       priority: 'medium'
     });
-  };
-
-  const handleTodayClick = () => {
-    setActiveView('calendar');
-    goToToday();
-  };
-
-  const handleCalendarClick = () => {
-    setActiveView('calendar');
   };
 
   const handleAnalyticsClick = () => {
@@ -121,26 +111,6 @@ export const Footer: React.FC = () => {
               aria-label="Быстро добавить событие"
             >
               <span className="hidden sm:inline">Добавить событие</span>
-            </Button>
-
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={handleTodayClick}
-              icon={Calendar}
-              aria-label="Перейти к сегодняшнему дню в календаре"
-            >
-              <span className="hidden sm:inline">Сегодня</span>
-            </Button>
-
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={handleCalendarClick}
-              icon={Calendar}
-              aria-label="Открыть календарь"
-            >
-              <span className="hidden md:inline">Календарь</span>
             </Button>
 
             <Button
