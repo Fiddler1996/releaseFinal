@@ -161,7 +161,7 @@ export const Header: React.FC = () => {
             variant="secondary"
             size="sm"
             onClick={toggleTheme}
-            icon={settings.animationsEnabled ? Sun : Moon}
+            icon={document.documentElement.classList.contains('dark') ? Sun : Moon}
             aria-label="Переключить тему"
           />
           {/* Домой */}
