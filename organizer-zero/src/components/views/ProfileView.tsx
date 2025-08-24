@@ -802,59 +802,78 @@ export default ProfileView;
 const SecurityQuickActions: React.FC = () => {
   const { addNotification } = useNotifications();
   const { securityManager } = useAppContext();
-  const [show, setShow] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [pwd, setPwd] = useState('');
   const [pwd2, setPwd2] = useState('');
 
-  if (!show) {
-    return (
-      <Button variant="secondary" size="sm" onClick={() => setShow(true)}>
+  return (
+    <>
+      <Button variant="secondary" size="sm" onClick={() => setIsOpen(true)}>
         Безопасность
       </Button>
-    );
-  }
 
-  return (
-    <div className="flex items-center gap-2">
-      <input
-        type="password"
-        placeholder="Новый пароль"
-        value={pwd}
-        onChange={(e) => setPwd(e.target.value)}
-        className="px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
-      />
-      <input
-        type="password"
-        placeholder="Повтор"
-        value={pwd2}
-        onChange={(e) => setPwd2(e.target.value)}
-        className="px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
-      />
-      <Button
-        variant="primary"
-        size="sm"
-        onClick={() => {
-          if (!pwd || pwd !== pwd2) {
-            addNotification({ type: 'error', title: 'Пароль', message: 'Пароли не совпадают', autoRemove: true });
-            return;
-          }
-          securityManager.setPassword(pwd);
-          addNotification({ type: 'success', title: 'Пароль', message: 'Пароль установлен', autoRemove: true });
-          setPwd(''); setPwd2('');
-        }}
-      >
-        Установить
-      </Button>
-      <Button
-        variant="secondary"
-        size="sm"
-        onClick={() => {
-          securityManager.lock();
-        }}
-      >
-        Заблокировать сейчас
-      </Button>
-      <Button variant="secondary" size="sm" onClick={() => setShow(false)}>Закрыть</Button>
-    </div>
+      {isOpen && (
+        <div className="fixed inset-0 z-[1000] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-gray-800 border border-gray-700 rounded-lg shadow-xl">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-700">
+              <div className="text-white font-semibold">Безопасность</div>
+              <button className="text-gray-400 hover:text-gray-200" onClick={() => setIsOpen(false)}>×</button>
+            </div>
+            <div className="p-4 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Новый пароль</label>
+                <input
+                  type="password"
+                  placeholder="Введите пароль"
+                  value={pwd}
+                  onChange={(e) => setPwd(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Повтор пароля</label>
+                <input
+                  type="password"
+                  placeholder="Повторите пароль"
+                  value={pwd2}
+                  onChange={(e) => setPwd2(e.target.value)}
+                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2 sm:justify-end">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => {
+                    securityManager.lock();
+                    addNotification({ type: 'info', title: 'Блокировка', message: 'Приложение заблокировано', autoRemove: true });
+                    setIsOpen(false);
+                  }}
+                >
+                  Заблокировать сейчас
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => {
+                    if (!pwd || pwd !== pwd2) {
+                      addNotification({ type: 'error', title: 'Пароль', message: 'Пароли не совпадают', autoRemove: true });
+                      return;
+                    }
+                    securityManager.setPassword(pwd);
+                    addNotification({ type: 'success', title: 'Пароль', message: 'Пароль установлен', autoRemove: true });
+                    setPwd(''); setPwd2('');
+                    setIsOpen(false);
+                  }}
+                >
+                  Сохранить пароль
+                </Button>
+                <Button variant="secondary" size="sm" onClick={() => setIsOpen(false)}>Отмена</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
