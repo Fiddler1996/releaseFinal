@@ -344,6 +344,46 @@ export const ProfileView: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Безопасность */}
+        <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
+          <h3 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
+            <Shield className="w-6 h-6" />
+            <span>Безопасность</span>
+          </h3>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-300">
+                Таймаут авто-блокировки (мин)
+              </label>
+              <input
+                type="number"
+                min={0}
+                step={1}
+                value={localSettings.autoLockTimeout ?? 0}
+                onChange={(e) => handleSettingChange('autoLockTimeout', Math.max(0, parseInt(e.target.value || '0')))}
+                className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white"
+              />
+              <p className="text-xs text-gray-400">0 = отключено. При бездействии дольше указанного времени экран блокируется.</p>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="text-white font-medium">Требовать аутентификацию</div>
+                <div className="text-sm text-gray-400">Повышает степень защиты для шифрования</div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={!!localSettings.requireAuth}
+                  onChange={(e) => handleSettingChange('requireAuth', e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Данные пользователя */}
