@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useReducer, useCallback, useEffect } from 'react';
 import type { AppContextType, CalendarEvent } from '../types';
 import { appReducer, initialState } from './reducer';
+import { securityManager } from './security';
 import { formatLocalDateKey } from '../utils/formatters';
 import { AUTO_REMOVE_DELAY } from '../utils/constants';
 
@@ -172,7 +173,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     getEventsForDate,
     getEventsForRange,
     getEventsForMonth,
-    playNotificationSound
+    playNotificationSound,
+    securityManager
   };
 
   return (

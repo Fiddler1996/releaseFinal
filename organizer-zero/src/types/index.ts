@@ -52,6 +52,8 @@ export interface AppSettings {
   profileName?: string;
   profileTimezone?: string;
   profileLanguage?: string;
+  autoLockTimeout?: number;
+  requireAuth?: boolean;
 }
 
 export interface LoadingState {
@@ -88,6 +90,15 @@ export interface AppContextType {
   getEventsForRange: (start: Date, end: Date) => CalendarEvent[];
   getEventsForMonth: (year: number, month: number) => CalendarEvent[];
   playNotificationSound: () => void;
+  securityManager: {
+    lock: () => void;
+    unlock: (password?: string) => void;
+    isLocked: () => boolean;
+    updateActivity: () => void;
+    encryptData: (data: string) => string;
+    decryptData: (cipher: string) => string;
+    getState: () => any;
+  };
 }
 
 // ==== ACTION TYPES ====
