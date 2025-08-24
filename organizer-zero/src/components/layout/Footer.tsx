@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { useAnalytics, useTimeBlocks, useCalendar, useNavigation } from '../../store/hooks';
 import { Button } from '../ui';
-import { formatNumber, formatPercent } from '../../utils/formatters';
+import { formatNumber, formatPercent, formatLocalDateKey } from '../../utils/formatters';
 
 /**
  * Компонент подвала с статистикой и быстрыми действиями
@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
       title: 'Быстрое событие',
       start: currentTime,
       end: endTime,
-      date: now.toISOString().split('T')[0],
+      date: formatLocalDateKey(now),
       type: 'personal',
       priority: 'medium'
     });

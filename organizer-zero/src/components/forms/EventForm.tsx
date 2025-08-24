@@ -4,6 +4,7 @@ import { X, Clock, MapPin, Tag, AlertCircle } from 'lucide-react';
 import { useTimeBlocks, useModal } from '../../store/hooks';
 import { Button } from '../ui';
 import type { TimeBlock, TimeBlockType, Priority } from '../../types';
+import { formatLocalDateKey } from '../../utils/formatters';
 
 interface EventFormProps {
   timeBlock?: TimeBlock | null;
@@ -28,7 +29,7 @@ export const EventForm: React.FC<EventFormProps> = ({
     title: '',
     start: '',
     end: '',
-    date: new Date().toISOString().split('T')[0],
+    date: formatLocalDateKey(new Date()),
     type: 'personal' as TimeBlockType,
     description: '',
     location: '',
@@ -47,7 +48,7 @@ export const EventForm: React.FC<EventFormProps> = ({
         title: timeBlock.title || '',
         start: timeBlock.start || '',
         end: timeBlock.end || '',
-        date: timeBlock.date || new Date().toISOString().split('T')[0],
+        date: timeBlock.date || formatLocalDateKey(new Date()),
         type: timeBlock.type || 'personal',
         description: timeBlock.description || '',
         location: timeBlock.location || '',
@@ -65,7 +66,7 @@ export const EventForm: React.FC<EventFormProps> = ({
         title: '',
         start: currentTime,
         end: endTime,
-        date: now.toISOString().split('T')[0],
+        date: formatLocalDateKey(now),
         type: 'personal',
         description: '',
         location: '',

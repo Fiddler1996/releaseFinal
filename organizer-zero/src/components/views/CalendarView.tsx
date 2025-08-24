@@ -3,7 +3,7 @@ import { useCalendar } from '../../store/hooks';
 import { addDays, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth } from 'date-fns';
 import { Button } from '../ui';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { formatDate } from '../../utils/formatters';
+import { formatDate, formatLocalDateKey } from '../../utils/formatters';
 import type { CalendarEvent } from '../../types';
 
 const CalendarView: React.FC = () => {
@@ -13,6 +13,7 @@ const CalendarView: React.FC = () => {
     setCalendarView,
     navigateCalendar,
     goToToday,
+    goToDate,
     getEventsForDate
   } = useCalendar();
 
@@ -40,7 +41,7 @@ const CalendarView: React.FC = () => {
 
     for (let i = 0; i < 7; i++) {
       const clone = day;
-      const dayKey = clone.toISOString().split('T')[0];
+      const dayKey = formatLocalDateKey(clone);
 
       const events = getEventsForDate(dayKey);
       const isCurrentMonth = isSameMonth(clone, monthStart);
@@ -95,16 +96,48 @@ const CalendarView: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between p-2 border-b">
-        <Button onClick={() => navigateCalendar('prev')}>
-          <ChevronLeft className="w-4 h-4" />
-        </Button>
-        <h2 className="font-semibold text-white capitalize">
-          {base.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })}
-        </h2>
-        <Button onClick={() => navigateCalendar('next')}>
-          <ChevronRight className="w-4 h-4" />
-        </Button>
+      <div className="flex items-center justify-between p-2 border-b gap-2">
+        <div className="flex items-center gap-1">
+          <Button onClick={() => navigateCalendar('prev')}>
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+          <Button onClick={() => navigateCalendar('next')}>
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+        <div className="flex items-center gap-2">
+          <select
+            value={base.getMonth()}
+            onChange={(e) => {
+              const m = Number(e.target.value);
+              const d = new Date(base);
+              d.setMonth(m);
+              d.setDate(1);
+              goToDate(d);
+            }}
+            className="bg-gray-700 text-white border border-gray-600 rounded px-2 py-1"
+          >
+            {Array.from({ length: 12 }).map((_, i) => (
+              <option key={i} value={i}>
+                {new Date(2000, i, 1).toLocaleString('ru-RU', { month: 'long' })}
+              </option>
+            ))}
+          </select>
+          <input
+            type="number"
+            value={base.getFullYear()}
+            onChange={(e) => {
+              const y = Number(e.target.value);
+              if (!isNaN(y)) {
+                const d = new Date(base);
+                d.setFullYear(y);
+                d.setDate(1);
+                goToDate(d);
+              }
+            }}
+            className="w-24 bg-gray-700 text-white border border-gray-600 rounded px-2 py-1"
+          />
+        </div>
       </div>
 
       <div className="flex items-center justify-center p-2">
@@ -131,10 +164,10 @@ const CalendarView: React.FC = () => {
                   <button className="text-gray-400 hover:text-gray-200" onClick={() => setModalDate(null)}>×</button>
                 </div>
                 <div className="max-h-80 overflow-y-auto space-y-2">
-                  {getEventsForDate(modalDate.toISOString().split('T')[0]).length === 0 ? (
+                  {getEventsForDate(formatLocalDateKey(modalDate)).length === 0 ? (
                     <div className="text-sm text-gray-400">Нет событий</div>
                   ) : (
-                    getEventsForDate(modalDate.toISOString().split('T')[0]).map((ev) => (
+                    getEventsForDate(formatLocalDateKey(modalDate)).map((ev) => (
                       <div key={ev.id} className="border border-gray-700 rounded p-2 bg-gray-750/50">
                         <div className="text-sm font-medium truncate">{ev.title}</div>
                         <div className="text-xs text-gray-300">{ev.start} — {ev.end}</div>

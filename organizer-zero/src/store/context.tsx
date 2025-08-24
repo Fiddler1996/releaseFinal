@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useReducer, useCallback, useEffect } from 'react';
 import type { AppContextType, CalendarEvent } from '../types';
 import { appReducer, initialState } from './reducer';
+import { formatLocalDateKey } from '../utils/formatters';
 import { AUTO_REMOVE_DELAY } from '../utils/constants';
 
 // ==== CONTEXT CREATION ====
@@ -45,8 +46,8 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
    * Получает события для диапазона дат
    */
   const getEventsForRange = useCallback((start: Date, end: Date): CalendarEvent[] => {
-    const startStr = start.toISOString().split('T')[0];
-    const endStr = end.toISOString().split('T')[0];
+    const startStr = formatLocalDateKey(start);
+    const endStr = formatLocalDateKey(end);
     
     return state.timeBlocks
       .filter(tb => tb.date >= startStr && tb.date <= endStr)

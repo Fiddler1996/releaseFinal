@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react';
 import { useAppContext } from './context';
 import type { TimeBlock, CalendarEvent, ViewType, AppMode, CalendarView } from '../types';
 import { normalizeEventText } from '../utils/parsers';
-import { isToday, isTomorrow } from '../utils/formatters';
+import { isToday, isTomorrow, formatLocalDateKey } from '../utils/formatters';
 
 // ==== TIME BLOCKS HOOKS ====
 
@@ -83,14 +83,14 @@ export const useCalendar = () => {
   );
 
   const todayEvents = useMemo(() => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = formatLocalDateKey(new Date());
     return getEventsForDate(today);
   }, [getEventsForDate]);
 
   const tomorrowEvents = useMemo(() => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const tomorrowStr = tomorrow.toISOString().split('T')[0];
+    const tomorrowStr = formatLocalDateKey(tomorrow);
     return getEventsForDate(tomorrowStr);
   }, [getEventsForDate]);
 

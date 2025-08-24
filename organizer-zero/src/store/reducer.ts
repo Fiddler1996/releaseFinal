@@ -1,5 +1,6 @@
 // store/reducer.ts
 import type { AppState, AppAction, TimeBlock, Notification } from '../types';
+import { formatLocalDateKey } from '../utils/formatters';
 
 // ==== INITIAL STATE ====
 export const initialState: AppState = {
@@ -9,7 +10,7 @@ export const initialState: AppState = {
       title: 'Утренняя практика фортепиано',
       start: '09:00',
       end: '10:30',
-      date: new Date().toISOString().split('T')[0],
+      date: formatLocalDateKey(new Date()),
       type: 'practice',
       description: 'Работа над гаммами и этюдами Черни',
       location: 'Музыкальная комната',
@@ -31,7 +32,7 @@ export const initialState: AppState = {
     }
   ],
   mode: 'planning',
-  currentDate: new Date().toISOString().split('T')[0],
+  currentDate: formatLocalDateKey(new Date()),
   activeView: 'calendar',
   selectedTimeBlock: null,
   isEditModalOpen: false,
@@ -206,7 +207,7 @@ export const appReducer = (state: AppState, action: AppAction): AppState => {
       return { 
         ...state, 
         calendarDate: action.payload,
-        currentDate: action.payload.toISOString().split('T')[0]
+        currentDate: formatLocalDateKey(action.payload)
       };
 
     case 'SET_CALENDAR_VIEW':
@@ -233,7 +234,7 @@ export const appReducer = (state: AppState, action: AppAction): AppState => {
       return {
         ...state,
         calendarDate: newDate,
-        currentDate: newDate.toISOString().split('T')[0]
+        currentDate: formatLocalDateKey(newDate)
       };
     }
 
@@ -242,7 +243,7 @@ export const appReducer = (state: AppState, action: AppAction): AppState => {
       return {
         ...state,
         calendarDate: today,
-        currentDate: today.toISOString().split('T')[0]
+        currentDate: formatLocalDateKey(today)
       };
     }
 
@@ -250,7 +251,7 @@ export const appReducer = (state: AppState, action: AppAction): AppState => {
       return {
         ...state,
         calendarDate: action.payload,
-        currentDate: action.payload.toISOString().split('T')[0]
+        currentDate: formatLocalDateKey(action.payload)
       };
     }
 
