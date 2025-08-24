@@ -48,7 +48,9 @@ export const initialState: AppState = {
     animationsEnabled: true,
     profileName: '',
     profileTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
-    profileLanguage: navigator.language || 'ru-RU'
+    profileLanguage: navigator.language || 'ru-RU',
+    autoLockTimeout: 0,
+    requireAuth: false
   },
   loading: { isLoading: false },
   error: null,
