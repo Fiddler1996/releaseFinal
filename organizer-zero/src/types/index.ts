@@ -52,6 +52,9 @@ export interface AppSettings {
   profileName?: string;
   profileTimezone?: string;
   profileLanguage?: string;
+  // security-related optional settings
+  autoLockTimeout?: number;
+  requireAuth?: boolean;
 }
 
 export interface LoadingState {
@@ -88,6 +91,7 @@ export interface AppContextType {
   getEventsForRange: (start: Date, end: Date) => CalendarEvent[];
   getEventsForMonth: (year: number, month: number) => CalendarEvent[];
   playNotificationSound: () => void;
+  securityManager: import('../store/security').SecurityManagerAPI;
 }
 
 // ==== ACTION TYPES ====
