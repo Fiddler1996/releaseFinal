@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проверка токенов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .token-item {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+        .token-key {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .token-value {
+            word-break: break-all;
+            margin-top: 5px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .no-tokens {
+            color: #6c757d;
+            font-style: italic;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Проверка токенов в localStorage</h1>
+        <div id="tokens-container">
+            <p>Загрузка...</p>
+        </div>
+    </div>
+
+    <script>
+        function checkTokens() {
+            const container = document.getElementById('tokens-container');
+            const tokens = [];
+            
+            // Проверяем все ключи в localStorage
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key) {
+                    const value = localStorage.getItem(key);
+                    tokens.push({ key, value });
+                }
+            }
+            
+            if (tokens.length === 0) {
+                container.innerHTML = '<p class="no-tokens">Токены не найдены в localStorage</p>';
+                return;
+            }
+            
+            let html = `<p>Найдено токенов: <strong>${tokens.length}</strong></p>`;
+            
+            tokens.forEach(token => {
+                html += `
+                    <div class="token-item">
+                        <div class="token-key">${token.key}</div>
+                        <div class="token-value">${token.value}</div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // Запускаем проверку при загрузке страницы
+        checkTokens();
+    </script>
+</body>
+</html>
