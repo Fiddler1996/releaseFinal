@@ -14,6 +14,7 @@ class SecurityManager {
   };
 
   private LOCK_KEY = 'security_lock';
+  private PASSWORD_KEY = 'security_password';
 
   constructor() {
     this.loadState();
@@ -58,7 +59,13 @@ class SecurityManager {
   }
 
   public unlock(password?: string) {
-    // placeholder for auth validation
+    // Require password if enabled or set
+    const needsAuth = this.needsAuth();
+    if (needsAuth) {
+      if (!password || !this.validatePassword(password)) {
+        return;
+      }
+    }
     this.state.isLocked = false;
     this.state.lastActive = Date.now();
     this.saveState();
@@ -95,6 +102,37 @@ class SecurityManager {
 
   public getState(): SecurityState {
     return { ...this.state };
+  }
+
+  public setPassword(password: string) {
+    try {
+      const hash = CryptoJS.SHA256(password).toString();
+      localStorage.setItem(this.PASSWORD_KEY, hash);
+    } catch {}
+  }
+
+  public hasPassword(): boolean {
+    try {
+      return !!localStorage.getItem(this.PASSWORD_KEY);
+    } catch {
+      return false;
+    }
+  }
+
+  private validatePassword(password: string): boolean {
+    try {
+      const stored = localStorage.getItem(this.PASSWORD_KEY);
+      if (!stored) return false;
+      const hash = CryptoJS.SHA256(password).toString();
+      return stored === hash;
+    } catch {
+      return false;
+    }
+  }
+
+  public needsAuth(): boolean {
+    const requireAuth = settingsManager.getSetting('requireAuth') as boolean | undefined;
+    return !!requireAuth || this.hasPassword();
   }
 }
 

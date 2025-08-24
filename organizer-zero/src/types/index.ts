@@ -98,6 +98,9 @@ export interface AppContextType {
     encryptData: (data: string) => string;
     decryptData: (cipher: string) => string;
     getState: () => any;
+    needsAuth: () => boolean;
+    setPassword: (password: string) => void;
+    hasPassword: () => boolean;
   };
 }
 

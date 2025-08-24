@@ -26,8 +26,9 @@ import { useSettings, useTimeBlocks, useNotifications } from '../../store/hooks'
 import { Button, LoadingSpinner } from '../ui';
 import { formatNumber } from '../../utils';
 import type { CalendarView } from '../../types';
-
-/**
+import { useAppContext } from '../../store/context';
+  
+  /**
  * Вид профиля с настройками пользователя и системы
  */
 export const ProfileView: React.FC = () => {
@@ -547,10 +548,14 @@ export const ProfileView: React.FC = () => {
 
       {/* Управление данными */}
       <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
-        <h3 className="text-xl font-semibold text-white mb-4 flex items-center space-x-2">
-          <Download className="w-6 h-6" />
-          <span>Управление данными</span>
-        </h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-semibold text-white flex items-center space-x-2">
+            <Download className="w-6 h-6" />
+            <span>Управление данными</span>
+          </h3>
+          {/* Quick security actions */}
+          <SecurityQuickActions />
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Экспорт */}
@@ -792,3 +797,64 @@ export const ProfileView: React.FC = () => {
 };
 
 export default ProfileView;
+
+// Inline component for quick security actions (password & lock)
+const SecurityQuickActions: React.FC = () => {
+  const { addNotification } = useNotifications();
+  const { securityManager } = useAppContext();
+  const [show, setShow] = useState(false);
+  const [pwd, setPwd] = useState('');
+  const [pwd2, setPwd2] = useState('');
+
+  if (!show) {
+    return (
+      <Button variant="secondary" size="sm" onClick={() => setShow(true)}>
+        Безопасность
+      </Button>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <input
+        type="password"
+        placeholder="Новый пароль"
+        value={pwd}
+        onChange={(e) => setPwd(e.target.value)}
+        className="px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
+      />
+      <input
+        type="password"
+        placeholder="Повтор"
+        value={pwd2}
+        onChange={(e) => setPwd2(e.target.value)}
+        className="px-2 py-1 bg-gray-700 border border-gray-600 rounded text-white text-sm"
+      />
+      <Button
+        variant="primary"
+        size="sm"
+        onClick={() => {
+          if (!pwd || pwd !== pwd2) {
+            addNotification({ type: 'error', title: 'Пароль', message: 'Пароли не совпадают', autoRemove: true });
+            return;
+          }
+          securityManager.setPassword(pwd);
+          addNotification({ type: 'success', title: 'Пароль', message: 'Пароль установлен', autoRemove: true });
+          setPwd(''); setPwd2('');
+        }}
+      >
+        Установить
+      </Button>
+      <Button
+        variant="secondary"
+        size="sm"
+        onClick={() => {
+          securityManager.lock();
+        }}
+      >
+        Заблокировать сейчас
+      </Button>
+      <Button variant="secondary" size="sm" onClick={() => setShow(false)}>Закрыть</Button>
+    </div>
+  );
+};

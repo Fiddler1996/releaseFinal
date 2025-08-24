@@ -9,15 +9,26 @@ import { useAppContext } from './store/context';
 const LockOverlay: React.FC = () => {
   const { securityManager } = useAppContext();
   const isLocked = securityManager.isLocked();
+  const needsAuth = securityManager.needsAuth();
+  const [password, setPassword] = React.useState('');
   if (!isLocked) return null;
   return (
     <div className="fixed inset-0 z-[1000] bg-black/80 backdrop-blur-sm flex items-center justify-center">
       <div className="bg-gray-800 border border-gray-700 rounded p-6 w-full max-w-sm text-center">
         <div className="text-white text-lg font-semibold mb-2">Приложение заблокировано</div>
-        <div className="text-gray-300 text-sm mb-4">Для продолжения разблокируйте</div>
+        <div className="text-gray-300 text-sm mb-4">{needsAuth ? 'Введите пароль для разблокировки' : 'Для продолжения разблокируйте'}</div>
+        {needsAuth && (
+          <input
+            type="password"
+            placeholder="Пароль"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full mb-3 px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
+          />
+        )}
         <button
           className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white"
-          onClick={() => securityManager.unlock()}
+          onClick={() => securityManager.unlock(needsAuth ? password : undefined)}
         >
           Разблокировать
         </button>
