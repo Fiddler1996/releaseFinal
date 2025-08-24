@@ -14,8 +14,6 @@ import {
   Flame,
   Leaf,
   ClipboardList,
-  Sun,
-  Moon,
   Home
 } from 'lucide-react';
 import { useNavigation, useNotifications, useSettings } from '../../store/hooks';
@@ -156,14 +154,6 @@ export const Header: React.FC = () => {
 
         {/* Уведомления и настройки */}
         <div className="flex items-center space-x-2">
-          {/* Переключатель темы */}
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={toggleTheme}
-            icon={settings.animationsEnabled ? Sun : Moon}
-            aria-label="Переключить тему"
-          />
           {/* Домой */}
           <Button
             variant="secondary"
@@ -191,7 +181,7 @@ export const Header: React.FC = () => {
 
             {/* Панель уведомлений */}
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-80 max-w-[90vw] bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50">
+              <div className="fixed right-2 top-16 w-80 max-w-[calc(100vw-1rem)] bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50">
                 <div className="p-4 border-b border-gray-700 flex justify-between items-center">
                   <h3 className="text-lg font-semibold text.white">Уведомления</h3>
                   {notifications.length > 0 && (
