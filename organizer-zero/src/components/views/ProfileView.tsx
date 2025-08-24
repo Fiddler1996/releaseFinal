@@ -441,6 +441,37 @@ export const ProfileView: React.FC = () => {
                 </select>
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Автоблокировка (мин)
+                  </label>
+                  <input
+                    type="number"
+                    min={0}
+                    max={240}
+                    value={localSettings.autoLockTimeout ?? 0}
+                    onChange={(e) => handleSettingChange('autoLockTimeout', Math.max(0, Math.min(240, parseInt(e.target.value || '0', 10))))}
+                    className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white"
+                  />
+                </div>
+                <div className="flex items-center justify-between mt-6">
+                  <div>
+                    <div className="text-white font-medium">Требовать аутентификацию</div>
+                    <div className="text-sm text-gray-400">Включает усиленное шифрование</div>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={!!localSettings.requireAuth}
+                      onChange={(e) => handleSettingChange('requireAuth', e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+              </div>
+
               <div className="flex items-center justify-end space-x-2 pt-2">
                 <Button variant="secondary" size="sm" onClick={resetSettings}>Отменить</Button>
                 <Button variant="primary" size="sm" onClick={saveSettings} icon={Save}>Сохранить</Button>
