@@ -133,6 +133,25 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     };
   }, [state.notifications, state.settings.soundEnabled, playNotificationSound]);
 
+  // ==== SETTINGS PERSISTENCE ====
+  // Load settings from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('oz_settings');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        dispatch({ type: 'UPDATE_SETTINGS', payload: parsed });
+      }
+    } catch {}
+  }, []);
+
+  // Save settings to localStorage when they change
+  useEffect(() => {
+    try {
+      localStorage.setItem('oz_settings', JSON.stringify(state.settings));
+    } catch {}
+  }, [state.settings]);
+
   // ==== AUTO-SAVE EFFECT ====
   
   useEffect(() => {

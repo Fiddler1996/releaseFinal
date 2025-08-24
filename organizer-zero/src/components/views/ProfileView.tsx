@@ -440,6 +440,11 @@ export const ProfileView: React.FC = () => {
                   <option value="lv-LV">Latviešu</option>
                 </select>
               </div>
+
+              <div className="flex items-center justify-end space-x-2 pt-2">
+                <Button variant="secondary" size="sm" onClick={resetSettings}>Отменить</Button>
+                <Button variant="primary" size="sm" onClick={saveSettings} icon={Save}>Сохранить</Button>
+              </div>
             </div>
           </div>
         </div>
