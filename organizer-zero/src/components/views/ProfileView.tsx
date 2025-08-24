@@ -404,6 +404,8 @@ export const ProfileView: React.FC = () => {
                 <input
                   type="text"
                   placeholder="Введите ваше имя"
+                  value={localSettings.profileName || ''}
+                  onChange={(e) => handleSettingChange('profileName', e.target.value)}
                   className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
                 />
               </div>
@@ -412,9 +414,14 @@ export const ProfileView: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   Часовой пояс
                 </label>
-                <select className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white">
-                  <option value="Europe/Riga">Europe/Riga (GMT+2)</option>
+                <select 
+                  value={localSettings.profileTimezone || ''}
+                  onChange={(e) => handleSettingChange('profileTimezone', e.target.value)}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white"
+                >
+                  <option value="">Авто ({Intl.DateTimeFormat().resolvedOptions().timeZone})</option>
                   <option value="Europe/Moscow">Europe/Moscow (GMT+3)</option>
+                  <option value="Europe/Riga">Europe/Riga (GMT+2)</option>
                   <option value="Europe/London">Europe/London (GMT+0)</option>
                 </select>
               </div>
@@ -423,10 +430,14 @@ export const ProfileView: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   Язык интерфейса
                 </label>
-                <select className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white">
-                  <option value="ru">Русский</option>
-                  <option value="en">English</option>
-                  <option value="lv">Latviešu</option>
+                <select 
+                  value={localSettings.profileLanguage || 'ru-RU'}
+                  onChange={(e) => handleSettingChange('profileLanguage', e.target.value)}
+                  className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white"
+                >
+                  <option value="ru-RU">Русский</option>
+                  <option value="en-US">English</option>
+                  <option value="lv-LV">Latviešu</option>
                 </select>
               </div>
             </div>

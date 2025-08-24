@@ -49,6 +49,9 @@ export interface AppSettings {
   timeFormat: '12h' | '24h';
   soundEnabled: boolean;
   animationsEnabled: boolean;
+  profileName?: string;
+  profileTimezone?: string;
+  profileLanguage?: string;
 }
 
 export interface LoadingState {

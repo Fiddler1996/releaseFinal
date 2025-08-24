@@ -18,10 +18,15 @@ const CalendarView: React.FC = () => {
   } = useCalendar();
 
   const [modalDate, setModalDate] = useState<Date | null>(null);
+  const [yearInput, setYearInput] = useState<string>(new Date(currentDate).getFullYear().toString());
 
   useEffect(() => {
     setCalendarView('month');
   }, [setCalendarView]);
+
+  useEffect(() => {
+    setYearInput(base.getFullYear().toString());
+  }, [currentDate]);
 
   const base = new Date(currentDate);
   const monthStart = startOfMonth(base);
@@ -124,15 +129,32 @@ const CalendarView: React.FC = () => {
             ))}
           </select>
           <input
-            type="number"
-            value={base.getFullYear()}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={yearInput}
             onChange={(e) => {
-              const y = Number(e.target.value);
-              if (!isNaN(y)) {
+              const next = e.target.value.replace(/[^0-9]/g, '');
+              setYearInput(next);
+            }}
+            onBlur={() => {
+              if (yearInput === '') {
+                setYearInput(base.getFullYear().toString());
+                return;
+              }
+              const y = parseInt(yearInput, 10);
+              if (!isNaN(y) && y >= 1900 && y <= 2100) {
                 const d = new Date(base);
                 d.setFullYear(y);
                 d.setDate(1);
                 goToDate(d);
+              } else {
+                setYearInput(base.getFullYear().toString());
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                (e.target as HTMLInputElement).blur();
               }
             }}
             className="w-24 bg-gray-700 text-white border border-gray-600 rounded px-2 py-1"

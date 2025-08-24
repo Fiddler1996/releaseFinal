@@ -45,7 +45,10 @@ export const initialState: AppState = {
     weekStartsOn: 1,
     timeFormat: '24h',
     soundEnabled: false,
-    animationsEnabled: true
+    animationsEnabled: true,
+    profileName: '',
+    profileTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+    profileLanguage: navigator.language || 'ru-RU'
   },
   loading: { isLoading: false },
   error: null,
