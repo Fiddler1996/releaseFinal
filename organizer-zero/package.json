@@ -1,7 +1,7 @@
 {
   "name": "organizer-zero-pwa",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,9 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "deploy:preview": "netlify deploy --dir=dist",
-    "deploy:prod": "netlify deploy --prod --dir=dist"
+    "deploy:prod": "netlify deploy --prod --dir=dist",
+    "release:notes": "echo 'Security module integrated; auto-lock and AES'",
+    "appRelease": "npm run build && git add -A && git commit -m 'chore(release): v$npm_package_version' || true && git tag v$npm_package_version -f && git push --follow-tags"
   },
   "dependencies": {
     "crypto-js": "^4.2.0",
