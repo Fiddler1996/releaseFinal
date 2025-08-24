@@ -331,22 +331,13 @@ export const useTheme = () => {
   };
 
   const init = () => {
-    const stored = getStored();
-    if (stored) {
-      applyTheme(stored);
-      return stored;
-    }
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme: 'light' | 'dark' = prefersDark ? 'dark' : 'light';
-    applyTheme(theme);
-    return theme;
+    applyTheme('dark');
+    return 'dark';
   };
 
   const toggle = () => {
-    const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-    const next = current === 'dark' ? 'light' : 'dark';
-    applyTheme(next);
-    return next;
+    applyTheme('dark');
+    return 'dark';
   };
 
   return { initTheme: init, toggleTheme: toggle };

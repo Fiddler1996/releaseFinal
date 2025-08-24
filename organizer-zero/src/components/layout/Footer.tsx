@@ -133,15 +133,7 @@ export const Footer: React.FC = () => {
               <span className="hidden sm:inline">Сегодня</span>
             </Button>
 
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={handleCalendarClick}
-              icon={Calendar}
-              aria-label="Открыть календарь"
-            >
-              <span className="hidden md:inline">Календарь</span>
-            </Button>
+            {/* Кнопка календаря удалена как дублирующая */}
 
             <Button
               variant="secondary"
